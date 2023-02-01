@@ -108,7 +108,7 @@ class InputProducts{
                 return res.status(500).json({
                     error: true,
                     // message: 'Unable to complete request at the moment'+req.body.state+' '+e.toString()
-                    message: 'Unable to complete request at the moment'
+                    message: 'Unable to complete request at the moment'+e.toString()
                 })
             }  
         }

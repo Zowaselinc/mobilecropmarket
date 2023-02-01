@@ -91,7 +91,7 @@ class CropController {
                 /* ------------------------ INSERT INTO CROP TABLE ----------------------- */
 
                 var crop = await Crop.create({
-                    user_id: req.global.user.id,
+                    user_id: req.body.user_id,
                     type: type,
                     category_id: req.body.category_id,
                     subcategory_id: req.body.subcategory_id,
