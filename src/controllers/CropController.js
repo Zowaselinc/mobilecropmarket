@@ -559,7 +559,8 @@ class CropController {
                 },],
 
                 where: { type: req.params.type, user_id: req.params.userid },
-                order: [['id', 'DESC']]
+                order: [['id', 'DESC']],
+                group: ["id"]
             });
 
 
