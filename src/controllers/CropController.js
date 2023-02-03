@@ -556,7 +556,11 @@ class CropController {
                 {
                     model: SubCategory,
                     as: "subcategory"
-                },],
+                },
+                {
+                    model: Auction,
+                    as: "auction"
+                }],
 
                 where: { type: req.params.type, user_id: req.params.userid },
                 order: [['id', 'DESC']],
