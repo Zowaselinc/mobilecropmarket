@@ -550,9 +550,13 @@ class CropController {
                     as: "subcategory"
                 },
                 {
-                    model: Auction,
-                    as: "auction"
-                }],
+                    model: User,
+                    as: "user"
+                },
+                {
+                    model: SubCategory,
+                    as: "subcategory"
+                },],
 
                 where: { type: req.params.type, user_id: req.params.userid },
                 order: [['id', 'DESC']]
@@ -563,7 +567,7 @@ class CropController {
 
             return res.status(200).json({
                 error: false,
-                message: "Crops grabbed successfully.",
+                message: "Crops grabbed successfully",
                 data: findCrops
             })
 
