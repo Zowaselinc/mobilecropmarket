@@ -77,7 +77,7 @@ class ConversationController{
 
                     return res.status(200).json({
                         error: false,
-                        message: "Conversations retrieved successfully",
+                        message: "Conversations retrieved successfully.",
                         data: rows
                     })
 
