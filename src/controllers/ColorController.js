@@ -15,7 +15,7 @@ class ColorController{
             if(allcolors){
                 return res.status(200).json({
                     error:false,
-                    message: "colors acquired successfully",
+                    message: "Colors acquired successfully",
                     data: allcolors
                 });
 

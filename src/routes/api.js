@@ -44,6 +44,7 @@ const TransactionValidator = require("./validators/TransactionValidator");
 const TransactionController = require("~controllers/TransactionController");
 const ColorController = require("~controllers/ColorController");
 const { Order } = require("~database/models");
+const ConversationController = require("~controllers/ConversationController");
 
 
 const Router = RouteProvider.Router;
@@ -124,6 +125,10 @@ Router.group((router) => {
     router.get('/color/getall', ColorController.getAllColors);
     router.get('/color/getbyid/:id', ColorController.getColorbyid);
     router.get('/color/params/:offset/:limit', ColorController.getColorbyparams);
+
+    /* ------------------------------ Conversation ------------------------------ */
+    router.get('/conversation/getall', ConversationController.getAllConversations);
+    router.get('/conversation/getbyuserid/:userid', ConversationController.getAllConversationsByUserID);
 
 })
 
