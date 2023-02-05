@@ -129,7 +129,7 @@ class NegotiationController {
 
                 } else {
 
-                    return res.status(400).json({
+                    return res.status(200).json({
                         error: true,
                         message: "No negotiations made by this user",
                         data: []
@@ -137,7 +137,7 @@ class NegotiationController {
 
                 }
             } else {
-                return res.status(400).json({
+                return res.status(200).json({
                     error: true,
                     message: "Invalid user ID",
                     data: []
