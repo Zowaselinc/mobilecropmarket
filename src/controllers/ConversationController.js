@@ -59,6 +59,7 @@ class ConversationController{
                         ],
                         type: "negotiation",
                     },
+                    order: [['id', 'DESC']],
                     include: [
                         { model: User, as: "initiator", required: true },
                         { model: User, as: "participant", required: true },
