@@ -172,6 +172,11 @@ Conversation.hasMany(Negotiation, {
   as: "negotiations"
 });
 
+Conversation.hasMany(Negotiation, {
+  foreignKey: "conversation_id",
+  as: "lastnegotiation"
+});
+
 Conversation.belongsTo(Crop, {
   foreignKey: "crop_id",
   as: "crop"

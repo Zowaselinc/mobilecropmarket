@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { IncludeCrop } = require("~database/helpers/modelncludes");
+const { IncludeCrop, IncludeNegotiation, IncludeNegotiations, IncludeLastNegotiations, IncludeLastNegotiation } = require("~database/helpers/modelncludes");
 const { Conversation, ErrorLog, User, Crop, CropSpecification, Negotiation } = require("~database/models");
 
 class ConversationController{
@@ -8,12 +8,7 @@ class ConversationController{
     static async getAllConversations(req,res){
         try{
 
-            var getAllConversations = await Conversation.findAll({
-                include: [
-                    { model: User, as: "initiator", required: true },
-                    { model: User, as: "participant", required: true },
-                ]
-            });
+            var getAllConversations = await Conversation.findAll({});
 
             if(getAllConversations){
                 return res.status(200).json({
@@ -67,11 +62,12 @@ class ConversationController{
                     include: [
                         { model: User, as: "initiator", required: true },
                         { model: User, as: "participant", required: true },
-                        { model: Negotiation, as: "negotiations", required: true },
                         IncludeCrop,
+                        // IncludeLastNegotiation
                     ],
                     group: ['id'],
                 });
+                
 
                 if (rows.length > 0) {
 
