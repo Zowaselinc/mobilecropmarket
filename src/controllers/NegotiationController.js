@@ -131,7 +131,7 @@ class NegotiationController {
 
                     return res.status(200).json({
                         error: true,
-                        message: "No negotiations made by this user",
+                        message: "No negotiations made by this user.",
                         data: []
                     })
 
