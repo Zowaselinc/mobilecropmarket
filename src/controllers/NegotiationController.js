@@ -31,7 +31,7 @@ class NegotiationController {
             if (!errors.isEmpty()) {
                 return res.status(200).json({
                     error: true,
-                    message: "All fields required",
+                    message: "All fields required reerg",
                     data: []
                 });
             }

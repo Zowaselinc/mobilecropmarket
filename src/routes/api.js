@@ -31,7 +31,6 @@ const { RegisterMerchantCorporateValidator, LoginValidator, RegisterPartnerValid
 const CategoryValidator = require('./validators/CategoryValidator');
 const SubCategoryValidator = require('./validators/SubCategoryValidator');
 const CropValidation = require('./validators/CropValidation');
-const NegotiationValidator = require('./validators/NegotiationValidator');
 const InputsValidator = require('./validators/InputsValidator');
 const OrderValidators = require("./validators/OrderValidators");
 
@@ -45,6 +44,7 @@ const TransactionController = require("~controllers/TransactionController");
 const ColorController = require("~controllers/ColorController");
 const { Order } = require("~database/models");
 const ConversationController = require("~controllers/ConversationController");
+const NegotiationValidator = require("./validators/NegotiationValidator");
 
 
 const Router = RouteProvider.Router;
@@ -173,7 +173,7 @@ Router.group((router) => {
 
 
     /* ------------------------------- Negotiation ------------------------------ */
-    router.post('/crop/negotiation/add', NegotiationValidator.addNegotiationValidator, NegotiationController.add);
+    router.post('/negotiation/add', NegotiationValidator.addNegotiationValidator, NegotiationController.add);
     // router.post('/crop/negotiation/admin/add', NegotiationValidator.addNegotiationValidator, NegotiationController.addmsgbyadmin);
     router.get('/crop/:cropId/negotiation/getbyuserid/:userid', NegotiationController.getbyuserid);
     router.get('/crop/negotiation/:userid', NegotiationController.getListByUser);
