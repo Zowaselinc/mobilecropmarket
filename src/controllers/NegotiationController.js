@@ -31,7 +31,7 @@ class NegotiationController {
             if (!errors.isEmpty()) {
                 return res.status(200).json({
                     error: true,
-                    message: "All fields required reerg",
+                    message: "All fields required",
                     data: []
                 });
             }
@@ -475,7 +475,7 @@ class NegotiationController {
 
             return res.status(500).json({
                 error: true,
-                message: "Unable to complete the request at the moment",
+                message: "Unable to complete the request at the moment"+error.toString(),
                 data: []
             })
         }

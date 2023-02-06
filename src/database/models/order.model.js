@@ -14,6 +14,10 @@ let Schema = (Sequelize,mode) => {
             type : Sequelize.STRING,
             allowNull : false
         },
+        seller_id: {
+            type: Sequelize.STRING,
+            allowNull: true
+        },
         negotiation_id : {
             type: Sequelize.STRING,
             allowNull : true
