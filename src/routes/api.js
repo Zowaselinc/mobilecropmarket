@@ -154,6 +154,11 @@ Router.group((router) => {
     router.get('/crop/:type/:userid', CropController.getByTypeandUserID);
     router.post('/crop/:id/deactivate', CropController.deactivateCropById);
     router.post('/crop/:id/fulfil', OrderController.fulfilCropOffer);
+    router.get('/crop/:id/bid', CropController.getCropBids);
+    router.post('/crop/:id/bid', CropValidation.createAuctionBid, CropController.bidForCrop);
+
+
+    
     // router.post('/crop/editbyid', CropValidation.addCropValidator, CropController.EditById);
 
 
