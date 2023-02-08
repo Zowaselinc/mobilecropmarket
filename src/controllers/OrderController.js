@@ -415,8 +415,7 @@ class OrderController {
                 where: { order_hash: req.params.order },
                 include: [
                     IncludeBuyer,
-                    IncludeNegotiation,
-                    { model: CropRequest, as: "request" },
+                    IncludeNegotiation
                 ]
             });
             if (findOrder) {
