@@ -144,7 +144,7 @@ class CropController {
 
                     if (createCropSpecification) {
                         if (type == "wanted") {
-                            var createCroropRequest = await CropRequest.create({
+                            var createCropRequest = await CropRequest.create({
                                 crop_id: crop.id,
                                 state: req.body.state,
                                 zip: req.body.zip,
