@@ -647,6 +647,10 @@ class CropController {
                     as: "category"
                 },
                 {
+                    model: SubCategory,
+                    as: "subcategory"
+                },
+                {
                     model: Auction,
                     as: "auction"
                 }],
