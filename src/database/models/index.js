@@ -68,6 +68,7 @@ const Cart = DB.cart = require("./cart.model.js").Model(initialInstance, createS
 const Input = DB.input = require("./input.model.js").Model(initialInstance, createSequelizeInstance(), Sequelize);
 const Conversation = DB.conversation = require("./conversation.model.js").Model(initialInstance, createSequelizeInstance(), Sequelize);
 const Color = DB.color = require('./color.model.js').Model(initialInstance, createSequelizeInstance(), Sequelize);
+const Bid = DB.color = require('./bid.model.js').Model(initialInstance, createSequelizeInstance(), Sequelize);
 
 //---------------------------------------------------
 //Register Relationships
@@ -172,11 +173,6 @@ Conversation.hasMany(Negotiation, {
   as: "negotiations"
 });
 
-Conversation.hasMany(Negotiation, {
-  foreignKey: "conversation_id",
-  as: "lastnegotiation"
-});
-
 Conversation.belongsTo(Crop, {
   foreignKey: "crop_id",
   as: "crop"
@@ -233,5 +229,6 @@ module.exports = {
   Conversation,
   Cart,
   Input,
-  Color
+  Color,
+  Bid
 };
