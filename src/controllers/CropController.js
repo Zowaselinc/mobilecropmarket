@@ -653,6 +653,10 @@ class CropController {
                 {
                     model: Auction,
                     as: "auction"
+                },
+                {
+                    model: User,
+                    as: 'user'
                 }],
 
                 where: { type: req.params.type, user_id: req.params.userid },
