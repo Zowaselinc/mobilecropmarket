@@ -421,7 +421,7 @@ class OrderController {
             if (findOrder) {
                 return res.status(200).json({
                     error: false,
-                    message: "Order retrieved successfully",
+                    message: "Order retrieved successfully.",
                     data: findOrder
                 })
             } else {
