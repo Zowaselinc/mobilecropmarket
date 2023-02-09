@@ -418,11 +418,20 @@ class OrderController {
                     IncludeNegotiation
                 ]
             });
+
             if (findOrder) {
+
+                // Get the productid from Order and use it to Crop_request
+                let cropId = JSON.parse(findOrder.products)[0].id;
+                let findCropRequest = await CropRequest.findOne({
+                    where: { crop_id: cropId }
+                });
+
                 return res.status(200).json({
                     error: false,
                     message: "Order retrieved successfully.",
-                    data: findOrder
+                    data: findOrder,
+                    crop_request: findCropRequest
                 })
             } else {
                 return res.status(400).json({
@@ -441,7 +450,7 @@ class OrderController {
             if (logError) {
                 return res.status(500).json({
                     error: true,
-                    message: 'Unable to complete request at the moment'
+                    message: 'Unable to complete request at the moment'+e.toString()
                 })
             }
         }

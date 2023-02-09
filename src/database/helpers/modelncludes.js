@@ -18,7 +18,6 @@ const ModelIncludes = {
         as : "negotiation",
         include : [
             { model: CropSpecification, where: { model_type: "negotiation" }, as: "specification", required: false },
-            { model: CropRequest, as: "request", required: false },
         ]
     },
     
