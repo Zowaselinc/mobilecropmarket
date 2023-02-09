@@ -429,7 +429,7 @@ class OrderController {
 
                 return res.status(200).json({
                     error: false,
-                    message: "Order retrieved successfully.",
+                    message: "Order retrieved successfully",
                     data: findOrder,
                     crop_request: findCropRequest
                 })
