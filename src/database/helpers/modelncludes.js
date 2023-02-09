@@ -1,4 +1,4 @@
-const { Crop, CropSpecification, User, Category, Negotiation, Order, SubCategory, Conversation, CropRequest } = require("../models");
+const { Crop, CropSpecification, User, Category, Negotiation, Order, SubCategory } = require("../models");
 
 const ModelIncludes = {
 
@@ -53,6 +53,11 @@ const ModelIncludes = {
     IncludeBuyer : {
         model : User,
         as : "buyer",
+    },
+
+    IncludeSeller : {
+        model : User,
+        as : "seller",
     },
 
     IncludeSpecification : {

@@ -195,6 +195,11 @@ Order.belongsTo(User, {
   as: "buyer"
 })
 
+Order.belongsTo(User, {
+  foreignKey: 'seller_id',
+  as: "seller"
+})
+
 Order.belongsTo(Negotiation, {
   foreignKey: "negotiation_id",
   as: "negotiation"

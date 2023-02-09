@@ -12,7 +12,7 @@ const { use } = require("~routes/api");
 
 
 const crypto = require('crypto');
-const { IncludeBuyer, IncludeNegotiation, CropIncludes } = require("~database/helpers/modelncludes");
+const { IncludeBuyer, IncludeNegotiation, CropIncludes, IncludeSeller } = require("~database/helpers/modelncludes");
 const { Op } = require("sequelize");
 
 
@@ -415,6 +415,7 @@ class OrderController {
                 where: { order_hash: req.params.order },
                 include: [
                     IncludeBuyer,
+                    IncludeSeller,
                     IncludeNegotiation
                 ]
             });
