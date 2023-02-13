@@ -695,9 +695,9 @@ class OrderController {
         try {
 
             if (!errors.isEmpty()) {
-                return res.status(400).json({
+                return res.status(200).json({
                     error: true,
-                    message: "All fields required",
+                    message: "All fields required"+errors,
                     data: []
                 });
             }

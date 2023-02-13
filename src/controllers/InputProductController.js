@@ -140,7 +140,7 @@ class InputProducts {
                     }
                 ],
                 where: {
-                    user_id: req.body.user_id,
+                    user_id: req.params.user_id,
                     active: 1
                 }
             });
