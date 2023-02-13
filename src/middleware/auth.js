@@ -13,7 +13,8 @@ class AuthMiddleware {
 
     async isAuthenticated(req, res) {
         let headers = req.headers;
-        let auth = headers.authorization;
+        let auth = headers.authorization.substring(7, headers.authorization.length);
+        // let auth = headers.authorization;
         try {
             if (auth) {
                 var error = "";
@@ -42,7 +43,7 @@ class AuthMiddleware {
                 res.send('Expired');
             } else {
                 res.status(403);
-                res.send('Forbidden');
+                res.send('Forbidden huihu'+error.toString());
             }
         }
 

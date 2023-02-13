@@ -138,8 +138,8 @@ Router.group((router) => {
 
 // Routes
 
-// Router.middleware(['isAuthenticated']).group((router) => {
-Router.group((router) => {
+Router.middleware(['isAuthenticated']).group((router) => {
+// Router.group((router) => {
 
     // router.get();
 
@@ -223,8 +223,8 @@ Router.group((router) => {
 /*                             INPUT MARKET PLACE                             */
 /* -------------------------------------------------------------------------- */
 
-// Router.middleware('isAuthenticated').group((router) => {
-Router.group((router) => {
+Router.middleware('isAuthenticated').group((router) => {
+// Router.group((router) => {
     /* ---------------------------------- Input ---------------------------------- */
     router.post('/input/add', InputsValidator.createInputValidator, InputController.createInput);
     router.get('/input/getallbyuserid/:user_id', InputController.getAllInputsByUser);
