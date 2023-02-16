@@ -2,7 +2,7 @@
 const jwt = require("jsonwebtoken");
 
 
-const { Pricing, Transaction, Order, ErrorLog, Negotiation, CropSpecification, Crop, CropRequest, Cart, Input } = require("~database/models");
+const { Pricing, Transaction, Order, ErrorLog, Negotiation, CropSpecification, Crop, CropRequest, Cart, Input, Notification } = require("~database/models");
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const Mailer = require('~services/mailer');
@@ -379,11 +379,29 @@ class OrderController {
                 products: JSON.stringify(products),
             })
 
+            /* ------------------------------ NOTIFICATION ------------------------------ */
+            if(createOrder){
+                var createNotification = await Notification.create({
+                    notification_name: "New Order #"+createOrder.order_hash,
+                    message: "Offer accepted without negotiation",
+                    single_seen: 0,
+                    general_seen: 0,
+                    model: "order",
+                    model_id: createOrder.order_hash,
+                    buyer_id: products[0].type == "wanted" ? products[0].user_id : req.body.user_id,
+                    buyer_type: products[0].type == "wanted" ? "corporate" : req.body.user_type,
+                    seller_id: products[0].type == "wanted" ? req.global.user.id : products[0].user_id,
+                    notification_to:  products[0].type == "wanted" ? "corporate" : req.body.user_type,
+                })
+            }
+            /* ------------------------------ NOTIFICATION ------------------------------ */
+
 
             return res.status(200).json({
                 "error": false,
                 "message": "New order created",
-                "data": createOrder
+                "data": createOrder,
+                "product": products
             })
         } catch (e) {
             var logError = await ErrorLog.create({

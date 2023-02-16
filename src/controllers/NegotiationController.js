@@ -1,7 +1,7 @@
 //Import validation result
 const { validationResult } = require('express-validator');
 const crypto = require('crypto');
-const { Negotiation, ErrorLog, CropSpecification, Crop, Conversation, User, Category, Order, CropRequest } = require('~database/models');
+const { Negotiation, ErrorLog, CropSpecification, Crop, Conversation, User, Category, Order, CropRequest, Notification } = require('~database/models');
 const { Op } = require('sequelize');
 const { request } = require('http');
 const ConversationController = require('./ConversationController');
@@ -55,6 +55,31 @@ class NegotiationController {
                     crop_id: req.body.crop_id
                 });
                 req.body.conversation_id = conversation.id;
+
+
+                /* ------------------------------ NOTIFICATION ------------------------------ */
+                if(conversation){
+                    var findCrop = await Crop.findOne({
+                        where: {
+                            id: conversation.crop_id
+                        }
+                    })
+
+                    var createNotification = await Notification.create({
+                        notification_name: "New Conversation",
+                        message: "Conversation initiated for crop negotiation",
+                        single_seen: 0,
+                        general_seen: 0,
+                        model: "conversation",
+                        model_id: conversation.id,
+                        buyer_id: findCrop.type == "wanted" ? req.body.receiver_id : req.body.sender_id,
+                        buyer_type: findCrop.type == "wanted" ? "corporate" : "merchant",
+                        seller_id: findCrop.type == "wanted" ? req.body.sender_id : req.body.receiver_id,
+                        notification_to:  findCrop.type == "wanted" ? "corporate" : "merchant",
+                    })
+                }
+                /* ------------------------------ NOTIFICATION ------------------------------ */
+
             } else {
                 req.body.conversation_id = conversation.id;
             }
@@ -81,7 +106,7 @@ class NegotiationController {
             if (logError) {
                 return res.status(500).json({
                     error: true,
-                    message: 'Unable to complete request at the moment'
+                    message: 'Unable to complete request at the moment'+e.toString()
                 })
             }
         }
@@ -123,7 +148,7 @@ class NegotiationController {
                 if (conversation) {
                     return res.status(200).json({
                         error: false,
-                        message: "Negotiations and messages retrieved successfully",
+                        message: "Negotiations and messages retrieved successfully user="+userId+"- crop="+cropId,
                         data: conversation.negotiations
                     })
 
@@ -153,12 +178,88 @@ class NegotiationController {
             if (logError) {
                 return res.status(500).json({
                     error: true,
-                    message: 'Unable to complete request at the moment'
+                    message: 'Unable to complete request at the moment'+e.toString()
                 })
             }
         }
     }
     /* --------------------------- GET ALL NEGOTIATION BY USERID --------------------------- */
+
+
+
+
+
+
+
+    /* ----------- GET ALL NEGOTIATION BY USERID AND PRODUCT OWNER ID ----------- */
+    static async getbyuseridAndProductownerid(req, res) {
+
+        const userId = req.params.userid;
+        const cropId = req.params.cropId;
+        const productownerId  = req.params.productownerid;
+
+        try {
+
+            if (userId !== "" || userId !== null || userId !== undefined) {
+
+                
+
+                var conversation = await Conversation.findOne({
+                    where: {
+                        [Op.or]: [
+                            { [Op.and]: [{ user_one: userId }, { user_two: productownerId }] },
+                            { [Op.and]: [{ user_one: productownerId }, { user_two: userId }] }
+                        ],
+                        crop_id: cropId
+                    },
+                    include: [
+                        IncludeNegotiations
+                    ]
+                })
+
+
+                if (conversation) {
+                    return res.status(200).json({
+                        error: false,
+                        message: "Negotiations and messages retrieved successfully user="+userId+"- crop="+cropId+" productowner="+productownerId,
+                        data: conversation.negotiations
+                    })
+
+                } else {
+
+                    return res.status(200).json({
+                        error: true,
+                        message: "No negotiations made by this user.",
+                        data: []
+                    })
+
+                }
+            } else {
+                return res.status(200).json({
+                    error: true,
+                    message: "Invalid user ID",
+                    data: []
+                })
+            }
+        } catch (e) {
+            var logError = await ErrorLog.create({
+                error_name: "Error on getting negotiation",
+                error_description: e.toString(),
+                route: `/api/crop/${cropId}/negotiation/getbyuserid/${userId}`,
+                error_code: "500"
+            });
+            if (logError) {
+                return res.status(500).json({
+                    error: true,
+                    message: 'Unable to complete request at the moment'+e.toString()
+                })
+            }
+        }
+    }
+    /* ----------- GET ALL NEGOTIATION BY USERID AND PRODUCT OWNER ID ----------- */
+
+
+
 
 
 
@@ -449,6 +550,23 @@ class NegotiationController {
                     tracking_details: JSON.stringify(tracking_details),
                     products: JSON.stringify(products),
                 })
+
+                /* ------------------------------ NOTIFICATION ------------------------------ */
+                if(order){
+                    var createNotification = await Notification.create({
+                        notification_name: "New Order #"+order.order_hash,
+                        message: "Offer accepted through negotiation",
+                        single_seen: 0,
+                        general_seen: 0,
+                        model: "order",
+                        model_id: order.order_hash,
+                        buyer_id: offer.type == "corporate" ? offer.sender_id : offer.receiver_id,
+                        buyer_type: "corporate",
+                        seller_id: offer.type == "corporate" ? offer.receiver_id : offer.sender_id,
+                        notification_to:  products[0].type == "wanted" ? req.global.user.type : "corporate",
+                    })
+                }
+                /* ------------------------------ NOTIFICATION ------------------------------ */
 
                 return res.status(200).json({
                     error: false,

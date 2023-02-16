@@ -45,6 +45,7 @@ const ColorController = require("~controllers/ColorController");
 const { Order } = require("~database/models");
 const ConversationController = require("~controllers/ConversationController");
 const NegotiationValidator = require("./validators/NegotiationValidator");
+const NotificationController = require("~controllers/NotificationController");
 
 
 const Router = RouteProvider.Router;
@@ -132,14 +133,33 @@ Router.group((router) => {
     
 })
 
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                              NEGOTIATION                              */
+/* -------------------------------------------------------------------------- */
+Router.middleware(['isAuthenticated']).group((router) => {
+    router.get('/notification/:usertype/:user_id', NotificationController.getAllNotificationByUserTypeandID);
+    router.post('/notification/general_seen/updatebyuser', NotificationController.updateGeneralNotificationToSeen);
+    router.post('/notification/:notification_id/updatesingle_seen', NotificationController.updateSingleNotificationToSeen);
+});
+/* -------------------------------------------------------------------------- */
+/*                              NEGOTIATION                              */
+/* -------------------------------------------------------------------------- */
+                                                                                                                         
+
+
+
+
 /* -------------------------------------------------------------------------- */
 /*                              CROP MARKETPLACE                              */
 /* -------------------------------------------------------------------------- */
 
 // Routes
 
-// Router.middleware(['isAuthenticated']).group((router) => {
-Router.group((router) => {
+Router.middleware(['isAuthenticated']).group((router) => {
+// Router.group((router) => {
 
     // router.get();
 
@@ -181,6 +201,7 @@ Router.group((router) => {
     router.post('/negotiation/add', NegotiationValidator.addNegotiationValidator, NegotiationController.add);
     // router.post('/crop/negotiation/admin/add', NegotiationValidator.addNegotiationValidator, NegotiationController.addmsgbyadmin);
     router.get('/crop/:cropId/negotiation/getbyuserid/:userid', NegotiationController.getbyuserid);
+    router.get('/crop/:cropId/negotiation/getbyuserid/:userid/productownerid/:productownerid', NegotiationController.getbyuseridAndProductownerid);
     router.get('/crop/negotiation/:userid', NegotiationController.getListByUser);
     router.post('/crop/negotiation/sendoffer', NegotiationController.sendNegotiationOffer);
     router.post('/crop/negotiation/accept', NegotiationValidator.negotiation, NegotiationController.acceptNegotiation);
