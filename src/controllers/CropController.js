@@ -134,6 +134,7 @@ class CropController {
                         infested_by_weight: req.body.infested_by_weight,
                         curcumin_content: req.body.curcumin_content,
                         extraneous: req.body.extraneous,
+                        unit: ""
                     })
 
                     if (createCropSpecification) {
@@ -176,7 +177,7 @@ class CropController {
             if (logError) {
                 return res.status(500).json({
                     error: true,
-                    message: 'Unable to complete request at the moment rfnbjb '+e.toString()
+                    message: 'Unable to complete request at the moment'+e.toString()
                 })
             }
         }
