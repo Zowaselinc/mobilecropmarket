@@ -481,7 +481,7 @@ class NegotiationController {
             if (logError) {
                 return res.status(500).json({
                     error: true,
-                    message: 'Unable to complete request at the moment'
+                    message: 'Unable to complete request at the moment'+e.toString()
                 })
             }
         }
@@ -553,7 +553,7 @@ class NegotiationController {
 
                 /* ------------------------------ NOTIFICATION ------------------------------ */
                 if(order){
-                    var createNotification = await Notification.create({
+                    var createNotificationtoCorporate = await Notification.create({
                         notification_name: "New Order #"+order.order_hash,
                         message: "Offer accepted through negotiation",
                         single_seen: 0,
@@ -565,6 +565,20 @@ class NegotiationController {
                         seller_id: offer.type == "corporate" ? offer.receiver_id : offer.sender_id,
                         notification_to:  products[0].type == "wanted" ? req.global.user.type : "corporate",
                     })
+
+                    var createNotificationtoMerchant = await Notification.create({
+                        notification_name: "New Order #"+order.order_hash,
+                        message: "Offer accepted through negotiation",
+                        single_seen: 0,
+                        general_seen: 0,
+                        model: "order",
+                        model_id: order.order_hash,
+                        buyer_id: offer.type == "corporate" ? offer.sender_id : offer.receiver_id,
+                        buyer_type: "corporate",
+                        seller_id: offer.type == "corporate" ? offer.receiver_id : offer.sender_id,
+                        notification_to:  "merchant"
+                    })
+              
                 }
                 /* ------------------------------ NOTIFICATION ------------------------------ */
 

@@ -607,20 +607,31 @@ class CropController {
     static async getByTypeandUserID(req, res) {
         try {
             var findCrops = await Crop.findAndCountAll({
-                include: [
-                    {
-                        model: CropSpecification,
-                        as: "specification",
-                    },
-                    {
-                        model: Category,
-                        as: "category",
-                    },
-                    {
-                        model: Auction,
-                        as: "auction",
-                    },
-                ],
+                include: [{
+                    model: CropSpecification,
+                    as: 'specification',
+                },
+                {
+                    model: Category,
+                    as: "category"
+                },
+                {
+                    model: SubCategory,
+                    as: "subcategory"
+                },
+                {
+                    model: CropRequest,
+                    as: 'crop_request',
+                },
+                {
+                    model: Auction,
+                    as: "auction"
+                },
+                {
+                    model: User,
+                    as: 'user'
+                }],
+
 
                 where: { type: req.params.type, user_id: req.params.userid },
                 order: [["id", "DESC"]],
