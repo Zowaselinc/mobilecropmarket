@@ -134,7 +134,7 @@ class CropController {
                         infested_by_weight: req.body.infested_by_weight,
                         curcumin_content: req.body.curcumin_content,
                         extraneous: req.body.extraneous,
-                        unit: ""
+                        unit: req.body.unit
                     })
 
                     if (createCropSpecification) {
