@@ -12,6 +12,7 @@ const {
     Cart,
     Input,
     User,
+    Notification,
 } = require("~database/models");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
@@ -392,7 +393,7 @@ class OrderController {
                     buyer_id: products[0].type == "wanted" ? products[0].user_id : req.body.user_id,
                     buyer_type: products[0].type == "wanted" ? "corporate" : req.body.user_type,
                     seller_id: products[0].type == "wanted" ? req.global.user.id : products[0].user_id,
-                    notification_to:  products[0].type == "wanted" ? "corporate" : req.body.user_type,
+                    notification_to:  products[0].type == "wanted" ? "corporate" : "merchant",
                 })
             }
             /* ------------------------------ NOTIFICATION ------------------------------ */

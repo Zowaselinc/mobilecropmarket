@@ -338,7 +338,8 @@ class CropController {
                         },
                     ],
                     where: { type: "offer", active: 1 },
-                    order: [['id', 'DESC']]
+                    order: [['id', 'DESC']],
+                    group: ["id"]
                 });
 
                 /* --------------------- If fetched the Wanted Crops --------------------- */
@@ -394,7 +395,8 @@ class CropController {
                 ],
 
                 where: { user_id: req.body.user_id, active: 1 },
-                order: [['id', 'DESC']]
+                order: [['id', 'DESC']],
+                group: ["id"]
             });
 
             /* --------------------- If fetched the Wanted Crops --------------------- */
@@ -636,6 +638,7 @@ class CropController {
 
                 where: { type: req.params.type, user_id: req.params.userid },
                 order: [["id", "DESC"]],
+                group: ["id"]
             });
 
             /* --------------------- If fetched the Wanted Crops --------------------- */

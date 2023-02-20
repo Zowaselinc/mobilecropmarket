@@ -24,6 +24,12 @@ const InputController = require('~controllers/InputProductController');
 
 const Cart = require('~controllers/CartController');
 
+const ConversationController = require("~controllers/ConversationController");
+
+const NotificationController = require("~controllers/NotificationController");
+
+const WalletController = require("~controllers/WalletController");
+
 /* ------------------------------- VALIDATORS ------------------------------- */
 
 const { RegisterMerchantCorporateValidator, LoginValidator, RegisterPartnerValidator, RegisterAgentValidator, SendVerificationValidator, ConfirmVerificationValidator, ResetPasswordValidator, VerifyResetTokenValidator } = require('./validators/AuthValidators');
@@ -33,6 +39,7 @@ const SubCategoryValidator = require('./validators/SubCategoryValidator');
 const CropValidation = require('./validators/CropValidation');
 const InputsValidator = require('./validators/InputsValidator');
 const OrderValidators = require("./validators/OrderValidators");
+const NegotiationValidator = require("./validators/NegotiationValidator");
 
 
 /* -------------------------------- PROVIDERS ------------------------------- */
@@ -43,9 +50,7 @@ const TransactionValidator = require("./validators/TransactionValidator");
 const TransactionController = require("~controllers/TransactionController");
 const ColorController = require("~controllers/ColorController");
 const { Order } = require("~database/models");
-const ConversationController = require("~controllers/ConversationController");
-const NegotiationValidator = require("./validators/NegotiationValidator");
-const NotificationController = require("~controllers/NotificationController");
+
 
 
 const Router = RouteProvider.Router;
@@ -137,7 +142,7 @@ Router.group((router) => {
 
 
 /* -------------------------------------------------------------------------- */
-/*                              NEGOTIATION                              */
+/*                              NOTIFICATION                                  */
 /* -------------------------------------------------------------------------- */
 Router.middleware(['isAuthenticated']).group((router) => {
     router.get('/notification/:usertype/:user_id', NotificationController.getAllNotificationByUserTypeandID);
@@ -145,11 +150,20 @@ Router.middleware(['isAuthenticated']).group((router) => {
     router.post('/notification/:notification_id/updatesingle_seen', NotificationController.updateSingleNotificationToSeen);
 });
 /* -------------------------------------------------------------------------- */
-/*                              NEGOTIATION                              */
+/*                              NOTIFICATION                                  */
+/* -------------------------------------------------------------------------- */
+
+
+/* -------------------------------------------------------------------------- */
+/*                                  WALLET                                    */
+/* -------------------------------------------------------------------------- */
+Router.middleware(['isAuthenticated']).group((router) => {
+    router.get('/wallet/user_id', WalletController.getWalletByUserId);
+});
+/* -------------------------------------------------------------------------- */
+/*                                  WALLET                                    */
 /* -------------------------------------------------------------------------- */
                                                                                                                          
-
-
 
 
 /* -------------------------------------------------------------------------- */
@@ -271,5 +285,3 @@ Router.middleware('isAuthenticated').group((router) => {
 })
 
 module.exports = Router;
-
-

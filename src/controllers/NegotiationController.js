@@ -582,6 +582,35 @@ class NegotiationController {
                 }
                 /* ------------------------------ NOTIFICATION ------------------------------ */
 
+                var buyer = await User.findByPk(order.buyer_id);
+                var seller = await User.findByPk(order.seller_id);
+                var crop = products[0];
+                var refererUrl = req.headers.referer;
+
+                // Send offer accepted email
+                var offerSender = offer.sender_id == buyer.id ? buyer : seller;
+                Mailer()
+                .to(offerSender.email).from(process.env.MAIL_FROM)
+                .subject('Crop offer accepted').template('emails.AcceptedCropOffer',{
+                    name : offerSender.first_name,
+                    cropQuantity : crop.specification.qty+crop.specification.test_weight,
+                    cropTitle : crop.subcategory.name+"-"+crop.specification.color,
+                    orderLink : `${refererUrl}dashboard/marketplace/order/${order.order_hash}`,
+                    orderHash : order.order_hash
+                }).send();
+
+                // Send offer confimation email
+                var offerReceiver = offer.receiver_id == buyer.id ? buyer : seller;
+                Mailer(offerReceiver.email)
+                .to().from(process.env.MAIL_FROM)
+                .subject('Offer confirmation').template('emails.OfferConfirmation',{
+                    name : offerReceiver.first_name,
+                    cropQuantity : crop.specification.qty+crop.specification.test_weight,
+                    cropTitle : crop.subcategory.name+"-"+crop.specification.color,
+                    orderLink : `${refererUrl}dashboard/marketplace/order/${order.order_hash}`,
+                    orderHash : order.order_hash
+                }).send();
+
                 return res.status(200).json({
                     error: false,
                     message: "Negotiation offer accepted successfully",
