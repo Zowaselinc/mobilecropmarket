@@ -222,6 +222,7 @@ class CropController {
                 ],
                 where: { type: "wanted", active: 1 },
                 order: [["id", "DESC"]],
+                group: ["id"]
             });
 
             /* --------------------- If fetched the Wanted Crops --------------------- */
@@ -277,6 +278,7 @@ class CropController {
 
                 where: { type: "auction", active: 1 },
                 order: [["id", "DESC"]],
+                group: ["id"]
             });
 
             /* --------------------- If fetched the Wanted Crops --------------------- */
@@ -635,8 +637,7 @@ class CropController {
                     as: 'user'
                 }],
 
-
-                where: { type: req.params.type, user_id: req.params.userid },
+                where: { type: req.params.type, user_id: req.global.user.id },
                 order: [["id", "DESC"]],
                 group: ["id"]
             });
