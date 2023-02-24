@@ -396,7 +396,7 @@ class CropController {
                     },
                 ],
 
-                where: { user_id: req.body.user_id, active: 1 },
+                where: { user_id: req.global.user.id, active: 1 },
                 order: [['id', 'DESC']],
                 group: ["id"]
             });
