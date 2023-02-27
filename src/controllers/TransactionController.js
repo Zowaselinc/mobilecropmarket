@@ -21,7 +21,7 @@ class TransactionController {
     static async createNewTransaction(req, res) {
 
         // return res.status(200).json({
-        //     message : "Add Category"
+        //     message : "Add Category" 
         // });
 
         const errors = validationResult(req);
