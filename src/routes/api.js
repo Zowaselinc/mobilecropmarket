@@ -284,4 +284,14 @@ Router.middleware('isAuthenticated').group((router) => {
     router.get('/input/order/history/getbyuserid/:user_id', OrderController.getOrderHistoryByUserId);
 })
 
+
+
+/* --------------------------- LANDING PAGE ROUTES -------------------------- */
+Router.middleware(['isLandingRefered']).group((router) => {
+    router.get('/load/cropswanted', CropController.getByCropWanted);
+    router.get('/load/cropsauction', CropController.getByCropAuctions);
+    router.get('/load/cropoffers', CropController.getByCropOffer);
+    router.get('/load/inputs', InputController.getallInputs);
+});
+
 module.exports = Router;
