@@ -56,7 +56,6 @@ class NegotiationController {
                 });
                 req.body.conversation_id = conversation.id;
 
-
                 /* ------------------------------ NOTIFICATION ------------------------------ */
                 if(conversation){
                     var findCrop = await Crop.findOne({
@@ -184,9 +183,6 @@ class NegotiationController {
         }
     }
     /* --------------------------- GET ALL NEGOTIATION BY USERID --------------------------- */
-
-
-
 
 
 
@@ -459,7 +455,7 @@ class NegotiationController {
                     infested_by_weight: req.body.infested_by_weight,
                     curcumin_content: req.body.curcumin_content,
                     extraneous: req.body.extraneous,
-                    unit: req.body.unit,
+                    // unit: req.body.unit,
                 })
             }
             // SEND INFORMATION TO PRODUCT SPECIFICATION TABLE //
