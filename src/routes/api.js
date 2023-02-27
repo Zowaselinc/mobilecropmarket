@@ -50,6 +50,7 @@ const TransactionValidator = require("./validators/TransactionValidator");
 const TransactionController = require("~controllers/TransactionController");
 const ColorController = require("~controllers/ColorController");
 const { Order } = require("~database/models");
+const AnalyticsController = require("~controllers/AnalyticsController");
 
 
 
@@ -282,6 +283,12 @@ Router.middleware('isAuthenticated').group((router) => {
     router.post('/input/order/add', OrderValidators.InputOrderValidator, OrderController.createInputOrder);
     router.post('/input/order/updateinputorder', OrderValidators.updateOrderValidator, OrderController.updateOrderPayment);
     router.get('/input/order/history/getbyuserid/:user_id', OrderController.getOrderHistoryByUserId);
+})
+
+/* ------------------------------ ANALYTICS ROUTES ----------------------------- */
+
+Router.middleware('isAuthenticated').group((router) => {
+    router.get('/analytics', AnalyticsController.getStatistics);
 })
 
 
