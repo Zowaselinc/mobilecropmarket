@@ -285,6 +285,14 @@ Router.middleware('isAuthenticated').group((router) => {
     router.get('/input/order/history/getbyuserid/:user_id', OrderController.getOrderHistoryByUserId);
 })
 
+
+/* ------------------------------ WALLET ROUTES ----------------------------- */
+
+Router.middleware('isAuthenticated').group((router) => {
+    router.get('/wallet/balance', WalletController.getBalance);
+    router.get('/wallet/transactions/recent', WalletController.getRecentTransactions);
+})
+
 /* ------------------------------ ANALYTICS ROUTES ----------------------------- */
 
 Router.middleware('isAuthenticated').group((router) => {

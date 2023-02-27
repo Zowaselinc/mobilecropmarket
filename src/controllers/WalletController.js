@@ -1,22 +1,85 @@
+const { validationResult } = require("express-validator");
+const { Wallet, Transaction, ErrorLog } = require("~database/models");
 
-const jwt = require("jsonwebtoken");
-const { Wallet, ErrorLog } = require("~database/models");
-const { body, validationResult } = require('express-validator');
-const bcrypt = require('bcryptjs');
-const Mailer = require('~services/mailer');
-const md5  = require('md5');
-const { reset } = require("nodemon");
-const { use } = require("~routes/api");
+class WalletController {
+    /* ------------------------------  ----------------------------- */
+    static async getBalance(req, res) {
+        try {
+            let user = req.global.user;
+            let wallet = await Wallet.findOne({
+                where: { user_id: user.id }
+            });
 
-const crypto = require('crypto');
-const { capitalize } = require("~utilities/string");
+            if (wallet) {
+                return res.status(200).json({
+                    error: false,
+                    message: "Success",
+                    data: { balance: wallet.balance }
+                });
+            } else {
+                return res.status(400).json({
+                    error: true,
+                    message: "Bad Request",
+                    data: {}
+                });
+            }
 
+        } catch (e) {
+            var logError = await ErrorLog.create({
+                error_name: "Error on getting wallet balance",
+                error_description: e.toString(),
+                route: "/api/wallet/balance",
+                error_code: "500"
+            });
+            if (logError) {
+                return res.status(500).json({
+                    error: true,
+                    message: 'Unable to complete request at the moment',
+                })
 
+            }
+        }
+    }
 
-class WalletController{
-   
+    static async getRecentTransactions(req, res) {
+        try {
+            let user = req.global.user;
+            let transactions = await Transaction.findAll({
+                where: { recipient_id: user.id },
+                limit: 10
+            });
+
+            if (transactions) {
+                return res.status(200).json({
+                    error: false,
+                    message: "Success",
+                    data: transactions
+                });
+            } else {
+                return res.status(400).json({
+                    error: true,
+                    message: "Bad Request",
+                    data: {}
+                });
+            }
+
+        } catch (e) {
+            var logError = await ErrorLog.create({
+                error_name: "Error on getting recent transactions",
+                error_description: e.toString(),
+                route: "/api/wallet/recent",
+                error_code: "500"
+            });
+            if (logError) {
+                return res.status(500).json({
+                    error: true,
+                    message: 'Unable to complete request at the moment' + e.toString()
+                })
+            }
+        }
+    }
     /* ---------------------------- * GRAB WALLET DETAILS * ---------------------------- */
-    static async getWalletByUserId(req , res){
+    static async getWalletByUserId(req, res) {
 
         const errors = validationResult(req);
         try {
@@ -47,13 +110,11 @@ class WalletController{
             if (logError) {
                 return res.status(500).json({
                     error: true,
-                    message: 'Unable to complete request at the moment'+e.toString()
+                    message: 'Unable to complete request at the moment' + e.toString()
                 })
             }
         }
     }
-    /* ---------------------------- * GRAB WALLET DETAILS * ---------------------------- */
-
 }
 
 module.exports = WalletController;
