@@ -435,6 +435,7 @@ class CropController {
                         {
                             model: CropSpecification,
                             as: "specification",
+                            where: { model_type: "crop" },
                         },
                         {
                             model: Category,
@@ -613,6 +614,7 @@ class CropController {
                 include: [{
                     model: CropSpecification,
                     as: 'specification',
+                    where: { model_type: "crop" },
                 },
                 {
                     model: Category,

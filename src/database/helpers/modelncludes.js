@@ -44,6 +44,13 @@ const ModelIncludes = {
     // },
 
     CropIncludes : [
+        { model: CropSpecification, where: { model_type: "crop" }, as: "specification" },
+        { model: User, as: "user" },
+        { model: Category, as: "category" },
+        { model : SubCategory, as : "subcategory"}
+    ],
+
+    CropHasNegotiationIncludes : [
         { model: CropSpecification, as: "specification" },
         { model: User, as: "user" },
         { model: Category, as: "category" },

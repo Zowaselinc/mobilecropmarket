@@ -30,9 +30,7 @@ class NotificationController {
 
     /* -------------------------- FETCH NOTIFICATIONS BY USERTYPE AND USERID ------------------------- */
     static async getAllNotificationByUserTypeandID(req, res) {
-
         const errors = validationResult(req);
-
         try {
             var findNotification = await Notification.findAll({ 
                 where: {
@@ -73,9 +71,6 @@ class NotificationController {
     }
     /* -------------------------- FETCH NOTIFICATIONS BY USERTYPE AND USERID ------------------------- */
 
-
-
-
     /* ------------------- UPDATE GENERAL NOTIFICATION TO SEEN ------------------ */
     static async updateGeneralNotificationToSeen(req, res) {
 
@@ -84,34 +79,54 @@ class NotificationController {
         // });
 
         try {
+            const user = req.global.user;
+            let findNotification;
+            if(user.type == "corporate"){
+                findNotification = await Notification.findAll({
+                    where: {
+                        notification_to: user.type,
+                        buyer_id : user.id,
+                        buyer_type : user.type
+                    }
+                })
+            }else if(user.type == "merchant"){
+                findNotification = await Notification.findAll({
+                    where: {
+                        notification_to: user.type,
+                        seller_id : user.id,
+                    }
+                })
+            }
 
-            var findNotification = await Notification.findAll({
-                
-                where: {
-                    notification_to: "corporate",
-                    buyer_id: req.global.user.id,
-                    buyer_type: req.global.user.type
-                }
-            })
 
             if(findNotification.length){
 
-                var seenAllNotificationsGenerally = await Notification.update({
-                    general_seen: 1
-                }, {
-                    where: {
-                        notification_to: "corporate",
-                        buyer_id: req.global.user.id,
-                        buyer_type: req.global.user.type
-                    }
-                });
+                if(user.type == "corporate"){
+                    var seenAllNotificationsGenerally = await Notification.update({
+                        general_seen: 1
+                    },  {
+                        where: {
+                            notification_to: user.type,
+                            buyer_id : user.id,
+                            buyer_type : user.type
+                        }
+                    })
+                }else if(user.type == "merchant"){
+                    var seenAllNotificationsGenerally = await Notification.update({
+                        general_seen: 1
+                    }, {
+                        where: {
+                            notification_to: user.type,
+                            seller_id : user.id,
+                        }
+                    })
+                }
 
                 return res.status(200).json({
                     error: false,
                     message: "Notifiation updated successfully",
                     data: []
                 })
-
             }else{
                 return res.status(400).json({
                     error: true,
@@ -119,10 +134,6 @@ class NotificationController {
                     data: []
                 })
             }
-       
-
-
-
         } catch (error) {
             var logError = await ErrorLog.create({
                 error_name: "Error on updating notification general_seen",
@@ -140,28 +151,21 @@ class NotificationController {
     }
     /* ------------------- UPDATE GENERAL NOTIFICATION TO SEEN ------------------ */
 
-
-
-
     /* ------------------- UPDATE SINGLE NOTIFICATION TO SEEN ------------------ */
     static async updateSingleNotificationToSeen(req, res) {
-
         // return res.status(200).json({
         //     message : "Accept Negotiation"
         // });
         let notification_id = req.params.notification_id;
 
         try {
-
-            var findNotification = await Notification.findAll({
-                
+            var findNotification = await Notification.findAll({     
                 where: {
                     id: notification_id
                 }
             })
 
             if(findNotification.length){
-
                 var seenSingleNotifications = await Notification.update({
                     single_seen: 1,
                     general_seen: 1
@@ -173,7 +177,7 @@ class NotificationController {
 
                 return res.status(200).json({
                     error: false,
-                    message: "Notifiation updated successfully",
+                    message: "Notification updated successfully",
                     data: []
                 })
 
@@ -184,7 +188,6 @@ class NotificationController {
                     data: []
                 })
             }
-
         } catch (error) {
             var logError = await ErrorLog.create({
                 error_name: "Error on updating notification single_seen",
