@@ -421,7 +421,6 @@ class AuthController{
         .to(data.email).from(process.env.MAIL_FROM)
         .subject('Verify').template('emails.OTPEmail',{code : code}).send();
 
-
         return res.status(200).json({
             status : true,
             message : "Code sent successfully"
