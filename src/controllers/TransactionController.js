@@ -43,7 +43,7 @@ class TransactionController {
 
 
             if (thetype == 'order') {
-                var order = await Order.findOne({ where: { order_id: type_id } });
+                var order = await Order.findOne({ where: { order_hash: type_id } });
                 if (!order) {
                     return res.status(200).json({ "error": true, "message": "Order not found" })
                 }
@@ -112,7 +112,7 @@ class TransactionController {
         const errors = validationResult(req);
 
         const transactionId = req.body.transaction_id;
-        const transactionRef = req.body.transaction_ref
+        const transactionRef = req.body.transaction_ref;
 
         try {
 
