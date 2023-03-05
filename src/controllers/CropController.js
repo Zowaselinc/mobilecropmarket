@@ -144,7 +144,7 @@ class CropController {
                                 zip: req.body.zip,
                                 country: req.body.country,
                                 address: req.body.warehouse_address,
-                                delivery_window: req.body.delivery_window
+                                delivery_window: req.body.delivery_window 
                             })
                         }
 
