@@ -154,6 +154,7 @@ class CropController {
                                 start_date: req.body.start_date,
                                 end_date: req.body.end_date,
                                 minimum_bid: req.body.minimum_bid,
+                                delivery_window: req.body.delivery_window,
                                 status: 1
                             })
                         }
