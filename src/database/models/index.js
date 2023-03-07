@@ -206,6 +206,11 @@ Order.belongsTo(Negotiation, {
   as: "negotiation"
 })
 
+Bid.belongsTo(User, {
+  foreignKey: "user_id",
+  as: "user"
+});
+
 
 
 module.exports = {

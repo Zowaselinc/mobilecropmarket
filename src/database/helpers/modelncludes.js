@@ -56,7 +56,7 @@ const ModelIncludes = {
         { model: Category, as: "category" },
         { model : SubCategory, as : "subcategory"}
     ],
-
+    
     IncludeBuyer : {
         model : User,
         as : "buyer",

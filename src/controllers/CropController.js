@@ -497,6 +497,7 @@ class CropController {
             /* ------------------------ UPDATE INTO CROP TABLE ----------------------- */
 
             var bids = await Bid.findAll({ 
+                include: {model: User, as: "user",},
                 where: { crop_id: req.params.id },
                 order: [["id", "DESC"]],
              });
@@ -523,7 +524,7 @@ class CropController {
             if (logError) {
                 return res.status(500).json({
                     error: true,
-                    message: "Unable to complete request at the moment",
+                    message: "Unable to complete request at the moment"+e.toString(),
                 });
             }
         }
