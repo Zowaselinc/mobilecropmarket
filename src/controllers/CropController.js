@@ -868,6 +868,45 @@ class CropController {
         }
     }
 
+    static async activateCropById(req, res) {
+        const errors = validationResult(req);
+
+        try {
+            /* ------------------------ UPDATE INTO CROP TABLE ----------------------- */
+
+            var crop = await Crop.findOne({ where: { id: req.params.id } });
+            if (crop) {
+                crop.active = 1;
+
+                crop.save();
+
+                return res.status(200).json({
+                    error: false,
+                    message: "Crop activated successfully",
+                });
+            } else {
+                return res.status(400).json({
+                    error: true,
+                    message: "No such crop found",
+                    data: req.body,
+                });
+            }
+        } catch (e) {
+            var logError = await ErrorLog.create({
+                error_name: "Error on activating a crop",
+                error_description: e.toString(),
+                route: "/api/crop/:id/activate",
+                error_code: "500",
+            });
+            if (logError) {
+                return res.status(500).json({
+                    error: true,
+                    message: "Unable to complete request at the moment",
+                });
+            }
+        }
+    }
+
     static async deactivateCropById(req, res) {
         const errors = validationResult(req);
 
