@@ -154,6 +154,46 @@ class WalletController {
             }
         }
     }
+
+    static async getOneTransaction(req, res) {
+        try {
+            let user = req.global.user;
+            let transactions = await Transaction.findAll({
+                where: { 
+                    recipient_id: user.id,
+                    transaction_id: req.params.transaction_id 
+                }
+            });
+
+            if (transactions) {
+                return res.status(200).json({
+                    error: false,
+                    message: "Success",
+                    data: transactions
+                });
+            } else {
+                return res.status(400).json({
+                    error: true,
+                    message: "Bad Request",
+                    data: {}
+                });
+            }
+
+        } catch (e) {
+            var logError = await ErrorLog.create({
+                error_name: "Error on getting one transaction by transaction_id",
+                error_description: e.toString(),
+                route: "/api/wallet/transactions/:transaction_id",
+                error_code: "500"
+            });
+            if (logError) {
+                return res.status(500).json({
+                    error: true,
+                    message: 'Unable to complete request at the moment' + e.toString()
+                })
+            }
+        }
+    }
 }
 
 module.exports = WalletController;

@@ -293,6 +293,7 @@ Router.middleware('isAuthenticated').group((router) => {
     router.get('/wallet/balance', WalletController.getBalance);
     router.get('/wallet/transactions/recent', WalletController.getRecentTransactions);
     router.get('/wallet/transactions/allrecent', WalletController.getAllRecentTransactions);
+    router.get('/wallet/transactions/:transaction_id', WalletController.getOneTransaction);
 })
 
 /* ------------------------------ ANALYTICS ROUTES ----------------------------- */
