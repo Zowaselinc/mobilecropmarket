@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const { IncludeBuyer } = require("~database/helpers/modelncludes");
 const { Wallet, Transaction, ErrorLog } = require("~database/models");
 
 class WalletController {
@@ -162,7 +163,10 @@ class WalletController {
                 where: { 
                     recipient_id: user.id,
                     transaction_id: req.params.transaction_id 
-                }
+                },
+                include: [
+                    IncludeBuyer
+                ]
             });
 
             if (transactions) {
