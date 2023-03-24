@@ -211,7 +211,7 @@ Bid.belongsTo(User, {
   as: "user"
 });
 
-Transaction.hasOne(User, {
+Transaction.belongsTo(User, {
   foreignKey: "recipient_id",
   as: "recipient"
 })
