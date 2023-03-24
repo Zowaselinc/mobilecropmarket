@@ -213,7 +213,7 @@ Bid.belongsTo(User, {
 
 User.belongsTo(Transaction, {
   foreignKey: "id",
-  as: "recipient"
+  as: "participant"
 })
 
 
