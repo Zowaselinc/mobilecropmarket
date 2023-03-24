@@ -216,6 +216,11 @@ Transaction.belongsTo(User, {
   as: "recipient"
 })
 
+Transaction.belongsTo(User, {
+  foreignKey: "user_id",
+  as: "seller"
+})
+
 
 
 module.exports = {
