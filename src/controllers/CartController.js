@@ -123,7 +123,7 @@ class InputsCart{
                 } else {
                     return res.status(200).json({
                         error: true,
-                        message: "Unable to complete the request at the moment",
+                        message: "Unable to complete the request at the moment "+e.toString(),
                         data: returnedResult
                     })
                 }
