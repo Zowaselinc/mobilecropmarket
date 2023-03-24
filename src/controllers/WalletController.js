@@ -47,8 +47,10 @@ class WalletController {
             let user = req.global.user;
             let transactions = await Transaction.findAll({
                 where: { 
-                    recipient_id: user.id,
-                    user_id: user.id
+                    [Op.or]: [
+                        {recipient_id: user.id},
+                        {user_id: user.id}
+                    ]
                 },
                 limit: 10
             });
@@ -127,8 +129,10 @@ class WalletController {
             let user = req.global.user;
             let transactions = await Transaction.findAll({
                 where: { 
-                    recipient_id: user.id,
-                    user_id: user.id 
+                    [Op.or]: [
+                        {recipient_id: user.id},
+                        {user_id: user.id}
+                    ] 
                 }
             });
 
