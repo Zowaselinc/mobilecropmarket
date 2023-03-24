@@ -67,9 +67,9 @@ const ModelIncludes = {
         as : "seller",
     },
 
-    IncludeParticipant : {
+    IncludeRecipient : {
         model : User,
-        as : "participant",
+        as : "recipient",
     },
 
     IncludeSpecification : {
