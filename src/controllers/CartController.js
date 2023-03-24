@@ -1,5 +1,5 @@
 const { request } = require("express");
-const { Input, ErrorLog, Cart } = require("~database/models");
+const { Input, ErrorLog, Cart, Category, SubCategory } = require("~database/models");
 const { validationResult } = require("express-validator");
 const crypto = require("crypto");
 // const jwt = require("jsonwebtoken");
@@ -123,7 +123,7 @@ class InputsCart{
                 } else {
                     return res.status(200).json({
                         error: true,
-                        message: "Unable to complete the request at the moment "+e.toString(),
+                        message: "No item in cart",
                         data: returnedResult
                     })
                 }
@@ -147,7 +147,7 @@ class InputsCart{
 
             return res.status(500).json({
                 error: true,
-                message: "Unable to complete the request at the moment",
+                message: "Unable to complete the request at the moment "+error.toString(),
                 data: []
             })
         }
