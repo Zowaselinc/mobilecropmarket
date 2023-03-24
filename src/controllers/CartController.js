@@ -102,10 +102,10 @@ class InputsCart{
                     include: [{
                         model: Input,
                         as: "input",
-                        // include: [
-                        //     { model: Category, as: "category" },
-                        //     { model: SubCategory, as: "subcategory" },
-                        // ]
+                        include: [
+                            { model: Category, as: "category" },
+                            { model: SubCategory, as: "subcategory" },
+                        ]
                     }],
                     where: {
                         "user_id": userid
