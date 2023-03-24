@@ -211,7 +211,7 @@ Bid.belongsTo(User, {
   as: "user"
 });
 
-User.belongsTo(Transaction, {
+Transaction.hasMany(User, {
   foreignKey: "id",
   as: "participant"
 })
