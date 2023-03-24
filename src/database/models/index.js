@@ -211,6 +211,11 @@ Bid.belongsTo(User, {
   as: "user"
 });
 
+Transaction.hasOne(User, {
+  foreignKey: "recipient_id",
+  as: "recipient"
+})
+
 
 
 module.exports = {

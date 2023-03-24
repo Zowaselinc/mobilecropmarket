@@ -67,6 +67,11 @@ const ModelIncludes = {
         as : "seller",
     },
 
+    IncludeParticipant : {
+        model : User,
+        as : "participant",
+    },
+
     IncludeSpecification : {
         model : CropSpecification,
         as : "specification"
