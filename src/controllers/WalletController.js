@@ -166,7 +166,7 @@ class WalletController {
                 },
                 include: [
                     IncludeRecipient,
-                    IncludeSeller
+                    IncludeSeller,
                 ]
             });
 
