@@ -156,6 +156,11 @@ Input.belongsTo(SubCategory, {
   as: "subcategory"
 });
 
+Input.belongsTo(User, {
+  foreignKey: "user_id",
+  as: "user"
+});
+
 Cart.belongsTo(Input, { foreignKey: 'input_id' })
 
 
