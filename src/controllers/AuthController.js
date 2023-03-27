@@ -1,4 +1,5 @@
 
+const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const { User, Company, AccessToken, Merchant, Partner, Corporate, Agent, UserCode, MerchantType, Wallet } = require("~database/models");
 const { body, validationResult } = require('express-validator');
@@ -6,7 +7,6 @@ const bcrypt = require('bcryptjs');
 const Mailer = require('~services/mailer');
 const md5 = require('md5');
 require('dotenv').config();
-
 
 class AuthController {
 
@@ -102,6 +102,9 @@ class AuthController {
         }
 
         const data = req.body;
+
+        // Check if email or Phone no Exists @ saveuser()
+
         let user = await AuthController.saveUser(data);
         console.log("log");
 
@@ -291,29 +294,46 @@ class AuthController {
         let encryptedPassword = await bcrypt.hash(data.password, 10);
 
         try {
-            user = await User.create({
-                first_name: data.first_name,
-                last_name: data.last_name,
-                phone: data.phone,
-                email: data.email,
-                is_verified: 0,
-                status: 1,
-                password: encryptedPassword,
-                type: data.user_type,
-                account_type: data.has_company || data.company_email ? "company" : "individual",
-            });
+            const checkUser = await User.findOne({where:{
+                [Op.or]: [
+                    {email:data.email},
+                    {phone: data.phone}
+                ],
+            }});
 
-            // Create user wallet
-            let wallet = await Wallet.create({
-                user_id: user.id,
-                balance: 0
-            });
+            if(checkUser){
+                user = {
+                    error: "true",
+                    message: `User with email or phone number already exists`
+                } 
+            }else{
+                user = await User.create({
+                    first_name: data.first_name,
+                    last_name: data.last_name,
+                    phone: data.phone,
+                    email: data.email,
+                    is_verified: 0,
+                    status: 1,
+                    password: encryptedPassword,
+                    type: data.user_type,
+                    account_type: data.has_company || data.company_email ? "company" : "individual",
+                   
+                });
+    
+                // Create user wallet
+                let wallet = await Wallet.create({
+                    user_id: user.id,
+                    balance: 0
+                });
+            }
+            
 
         } catch (e) {
           
             user = {
                 error: true,
-                message: e.sqlMessage
+                // message: e.sqlMessage
+                message: e.toString()
             }
         }
 
@@ -333,13 +353,15 @@ class AuthController {
                 company_address: data.company_address,
                 company_phone: data.company_phone,
                 company_email: data.company_email,
+                country:data.company_country,
                 state: data.company_state,
                 rc_number: data.rc_number
             });
         } catch (e) {
             company = {
                 error: true,
-                message: e.sqlMessage
+                // message: e.sqlMessage
+                message: e.toString()
             }
         }
 

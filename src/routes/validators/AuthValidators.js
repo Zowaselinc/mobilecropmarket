@@ -14,6 +14,7 @@ const Constraints = {
         body('has_company').optional().isBoolean(),
         body('company_name').if(body('has_company').exists()).isString(),
         body('company_address').if(body('has_company').exists()).isString(),
+        body('company_country').if(body('has_company').exists()).isString(),
         body('company_state').if(body('has_company').exists()).isString(),
         body('rc_number').if(body('has_company').exists()).isString(),
         body('company_email').if(body('has_company').exists()).isString().isEmail(),
