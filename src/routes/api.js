@@ -51,6 +51,10 @@ const TransactionController = require("~controllers/TransactionController");
 const ColorController = require("~controllers/ColorController");
 const { Order } = require("~database/models");
 const AnalyticsController = require("~controllers/AnalyticsController");
+const AccountController = require("~controllers/AccountController");
+const AccountValidator = require("./validators/AccountValidator");
+const KYCController = require("~controllers/KYCController");
+const KYBController = require("~controllers/KYBController");
 
 
 
@@ -106,7 +110,29 @@ Router.middleware(['isAuthenticated']).group((router) => {
 
     router.get('/users/:id/inputs', InputController.getAllInputsByUser);
 
+
+    // Account Settings
+
+    router.post('/users/account', AccountValidator.updateAccountValidator, AccountController.updateAccountDetails);
+
+    router.post('/users/account/password', AccountValidator.changePasswordValidator, AccountController.changePassword);
+
+    router.get('/users/account/kyctypes', KYCController.getDocumentTypes);
+
+    router.post('/users/account/kyc', AccountValidator.startKYC, KYCController.startKycVerification);
+
+    router.get("/users/account/kycstatus", KYCController.retriveCheck);
+
+    router.get("/users/account/kycdocument/:id", KYCController.getDocument);
+
+    router.post('/users/account/kyb', AccountValidator.startKYB, KYBController.startKybVerification);
+
 });
+
+
+
+
+
 
 
 /* -------------------------------------------------------------------------- */
