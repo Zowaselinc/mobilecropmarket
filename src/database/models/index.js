@@ -70,6 +70,9 @@ const Conversation = DB.conversation = require("./conversation.model.js").Model(
 const Color = DB.color = require('./color.model.js').Model(initialInstance, createSequelizeInstance(), Sequelize);
 const Bid = DB.color = require('./bid.model.js').Model(initialInstance, createSequelizeInstance(), Sequelize);
 const Notification = DB.notification = require('./notification.model.js').Model(initialInstance, createSequelizeInstance(), Sequelize);
+const Withdrawal = DB.withdrawal = require('./withdrawal.model.js').Model(initialInstance, createSequelizeInstance(), Sequelize);
+const KYC = DB.kyc = require('./kyc.model.js').Model(initialInstance, createSequelizeInstance(), Sequelize);
+const KYB = DB.kyb = require('./kyb.model').Model(initialInstance, createSequelizeInstance(), Sequelize);
 
 //---------------------------------------------------
 //Register Relationships
@@ -226,6 +229,22 @@ Transaction.belongsTo(User, {
   as: "seller"
 })
 
+/* ----------------------------------- KYC ---------------------------------- */
+
+User.hasOne(KYC,{
+  foreignKey : "user_id",
+  as : "kyc"
+});
+
+
+/* ----------------------------------- KYB ---------------------------------- */
+
+User.hasOne(KYB,{
+  foreignKey : "user_id",
+  as : "kyb"
+});
+
+
 
 
 module.exports = {
@@ -257,5 +276,8 @@ module.exports = {
   Input,
   Color,
   Bid,
-  Notification
+  Notification,
+  Withdrawal,
+  KYC,
+  KYB
 };
