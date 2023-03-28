@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const { Op } = require("sequelize");
 const { IncludeRecipient, IncludeSeller } = require("~database/helpers/modelncludes");
 const { Wallet, Transaction, ErrorLog } = require("~database/models");
 
