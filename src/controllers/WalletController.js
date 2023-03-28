@@ -36,7 +36,7 @@ class WalletController {
             if (logError) {
                 return res.status(500).json({
                     error: true,
-                    message: 'Unable to complete request at the moment',
+                    message: 'Unable to complete request at the moment brbbgrtgr',
                 })
 
             }
@@ -63,7 +63,7 @@ class WalletController {
                     data: transactions
                 });
             } else {
-                return res.status(400).json({
+                return res.status(200).json({
                     error: true,
                     message: "Bad Request",
                     data: {}
@@ -80,7 +80,7 @@ class WalletController {
             if (logError) {
                 return res.status(500).json({
                     error: true,
-                    message: 'Unable to complete request at the moment' + e.toString()
+                    message: 'Unable to complete request at the moment bbbb' + e.toString()
                 })
             }
         }
