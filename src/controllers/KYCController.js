@@ -87,7 +87,7 @@ class KYCController {
                     first_name: body.first_name,
                     last_name: body.last_name,
                     phone_number: body.phone,
-                    dob: body.email,
+                    dob: body.dob,
                     country: body.country,
                     state: body.state,
                     gender: body.gender,
@@ -168,7 +168,7 @@ class KYCController {
             return res.status(200).json({
                 error: false,
                 message: "This User Has No Applicant ID  Or Check ID",
-                data: { status: "Unverified" }
+                data: { status: "Unverified", "efr":req.global.kyc }
             });
         }
 

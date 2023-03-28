@@ -51,10 +51,10 @@ const TransactionController = require("~controllers/TransactionController");
 const ColorController = require("~controllers/ColorController");
 const { Order } = require("~database/models");
 const AnalyticsController = require("~controllers/AnalyticsController");
-const AccountController = require("~controllers/AccountController");
 const AccountValidator = require("./validators/AccountValidator");
 const KYCController = require("~controllers/KYCController");
 const KYBController = require("~controllers/KYBController");
+const AccountController = require("~controllers/AccountController");
 
 
 
@@ -114,6 +114,8 @@ Router.middleware(['isAuthenticated']).group((router) => {
     // Account Settings
 
     router.post('/users/account', AccountValidator.updateAccountValidator, AccountController.updateAccountDetails);
+    
+    router.post('/users/account/company', AccountValidator.updateCompanyValidator, AccountController.updateCompanyDetails);
 
     router.post('/users/account/password', AccountValidator.changePasswordValidator, AccountController.changePassword);
 
