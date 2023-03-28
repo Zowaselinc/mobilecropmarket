@@ -205,8 +205,7 @@ Router.middleware(['isAuthenticated']).group((router) => {
 // Router.group((router) => {
 
     // router.get();
-
-
+ 
     /* ------------------------------- Crop ------------------------------ */
 
     router.post('/crop/:type/add', CropValidation.addCropWantedValidator, CropController.add);
