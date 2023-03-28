@@ -111,7 +111,7 @@ Router.middleware(['isAuthenticated']).group((router) => {
     router.get('/users/:id/inputs', InputController.getAllInputsByUser);
 
 
-    // Account Settings
+    // Account Settings 
 
     router.post('/users/account', AccountValidator.updateAccountValidator, AccountController.updateAccountDetails);
     
