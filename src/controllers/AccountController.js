@@ -112,6 +112,7 @@ class AccountController {
                 company.company_email = req.body.email;
                 company.company_phone = req.body.phone;
                 company.state = req.body.state;
+                company.company_website = req.body.company_website;
 
                 company.save();
 

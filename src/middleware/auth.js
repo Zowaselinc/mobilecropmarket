@@ -1,4 +1,4 @@
-const { AccessToken, User } = require("~database/models");
+const { AccessToken, User, KYC } = require("~database/models");
 const jwt = require("jsonwebtoken");
 const GlobalUtils = require("~utilities/global");
 class AuthMiddleware {
@@ -20,8 +20,14 @@ class AuthMiddleware {
                 var error = "";
                 const decoded = jwt.verify(auth, process.env.TOKEN_KEY);
                 var getToken = await AccessToken.findAll({ where: { user_id: decoded.user_id } });
+                var getKycdata = await KYC.findOne({ where: { user_id: decoded.user_id } });
                 var user = await User.findByPk(decoded.user_id);
-                req.global = { user: user };
+                if (getKycdata) {
+                    req.global = { user: user, kyc: getKycdata };
+                } else {
+                    req.global = { user: user };
+                }
+
                 var tokenFound = false;
                 if (getToken) {
                     getToken.forEach(item => {
@@ -43,7 +49,7 @@ class AuthMiddleware {
                 res.send('Expired');
             } else {
                 res.status(403);
-                res.send('Forbidden huihu'+error.toString());
+                res.send('Forbidden '+error.toString());
             }
         }
 
