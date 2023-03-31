@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const OnfidoInstance = require("~providers/Onfido");
 var base64 = require('base64-stream');
 
+
 const { EncryptConfig, DecryptConfig } = require("~utilities/encryption/encrypt");
 class KYCController {
     /* ------------------------------  ----------------------------- */
@@ -116,10 +117,15 @@ class KYCController {
                     } catch (error) {
                         console.log(error);
                     }
+                    var data = req.body
+
+
                     return res.status(200).json({
                         error: false,
                         message: "Successful",
                         data: { response: response },
+                        user: { userData, data },
+
                     });
                 } else {
                     return res.status(400).json({
@@ -164,11 +170,10 @@ class KYCController {
 
         }
         if (!kycDataObj) {
-
             return res.status(200).json({
                 error: false,
-                message: "This User Has No Applicant ID  Or Check ID",
-                data: { status: "Unverified", "efr":req.global.kyc }
+                message: "KYC not started",
+                data: { status: "Unverified" }
             });
         }
 
@@ -176,12 +181,9 @@ class KYCController {
         try {
             var doc = await OnfidoInstance.retriveDocument(kycDataObj.check_id);
             try {
-
                 const user = await KYC.update({
-                    status: doc.status,
-                    is_verified: doc.status == "complete" ? 1 : 0
+                    status: doc.status
                 }, { where: { user_id: userData.id } });
-
 
             } catch (error) {
                 console.log(error);
@@ -193,14 +195,17 @@ class KYCController {
                     const document = documentList[index];
                     const downloadDocument = await OnfidoInstance.downloadDocument(document.id);
                     var base64 = await KYCController.streamToBase64(downloadDocument.asStream());
+                    var applicant = await OnfidoInstance.retrieveApplicant(kycDataObj.applicant_id);
+                    applicant['bvn'] = DecryptConfig(kycDataObj.bvn);
                     documentList[index]['base64'] = `data:${downloadDocument.contentType};base64,${base64}`;
                 }
                 return res.status(200).json({
                     error: false,
                     message: "Successful",
                     data: {
-                        status: doc.status == "complete" ? "Verified" : "Pending Verification",
-                        documents: documentList
+                        status: kycDataObj.verified == 1 ? "Verified" : "Pending Verification",
+                        documents: documentList,
+                        applicant: applicant
                     }
                 });
             } else {
