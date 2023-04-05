@@ -1085,7 +1085,7 @@ class OrderController {
 
             if (order) {
 
-                var executeCommand = await Order.update({
+                var executeCommand = await Order.update({   
                     "waybill_details": JSON.stringify({
                         address: req.body.address,
                         country: req.body.country,
