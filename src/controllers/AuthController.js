@@ -49,7 +49,7 @@ class AuthController {
                     model: User, as: "user", include: [
                         { model: Company, as: "company" }
                     ]
-                }
+                } 
             ]
         });
 
