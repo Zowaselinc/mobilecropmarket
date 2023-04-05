@@ -110,6 +110,7 @@ class AccountController {
                 company.company_name = req.body.company_name;
                 company.company_address = req.body.company_address;
                 company.company_email = req.body.email;
+                company.contact_person = req.body.contact_person;
                 company.company_phone = req.body.phone;
                 company.state = req.body.state;
                 company.company_website = req.body.company_website;

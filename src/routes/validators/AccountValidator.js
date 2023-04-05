@@ -16,6 +16,7 @@ module.exports = {
         body('company_address').isString().notEmpty(),
         body('state').isString().notEmpty(),
         body('email').isString().notEmpty(),
+        body('contact_person').isString().notEmpty(),
         body('phone').isString().notEmpty(),
 
     ],
@@ -66,7 +67,7 @@ module.exports = {
         body('email').not().isEmpty(),
 
     ],
-
+    
 
 
 }

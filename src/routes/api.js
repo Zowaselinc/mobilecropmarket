@@ -127,7 +127,13 @@ Router.middleware(['isAuthenticated']).group((router) => {
 
     router.get("/users/account/kycdocument/:id", KYCController.getDocument);
 
-    router.post('/users/account/kyb', AccountValidator.startKYB, KYBController.startKybVerification);
+    /* ----------------------------------- KYB ---------------------------------- */
+
+    router.post('/account/kyb', AccountValidator.startKYB, KYBController.startKybVerification);
+
+    router.get("/account/kybstatus", KYBController.retriveCheck);
+
+    router.get("/account/kybdocument", KYBController.getDocument);
 
 });
 

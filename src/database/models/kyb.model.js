@@ -18,6 +18,12 @@ let Schema = (Sequelize, mode) => {
         mou: {
             type: Sequelize.STRING,
         },
+        check_id: {
+            type: Sequelize.STRING
+        },
+        status: {
+            type: Sequelize.ENUM("pending", "complete", "failed")
+        },
         ...generateTimestamps(Sequelize, mode)
     }
 }
