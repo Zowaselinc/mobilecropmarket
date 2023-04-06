@@ -161,4 +161,4 @@ class OnfidoProvider {
 }
 
 const OnfidoInstance = new OnfidoProvider();
-module.exports = OnfidoInstance;s
+module.exports = OnfidoInstance;
