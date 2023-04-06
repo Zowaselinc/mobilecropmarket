@@ -33,7 +33,7 @@ class AuthController {
                 error: true,
                 message: "Invalid credentials"
             });
-        }
+        } 
 
         var userTypeMap = {
             merchant: Merchant,
