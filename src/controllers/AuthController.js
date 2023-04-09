@@ -102,6 +102,7 @@ class AuthController {
         }
 
         const data = req.body;
+        console.log(data);
 
         // Check if email or Phone no Exists @ saveuser()
 
@@ -109,8 +110,8 @@ class AuthController {
         console.log("log");
 
         if (user.error) {
-            console.log(user)
-            return res.status(400).json({
+            console.log(user, "User")
+            return res.status(200).json({
                 error: true,
                 message: user.message
             });
