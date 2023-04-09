@@ -9,7 +9,7 @@ const Utilities = require('~utilities/file');
 const transporter = nodemailer.createTransport({
     host: process.env.MAIL_SMTP_HOST,
     port: process.env.MAIL_SMTP_PORT,
-    secure: false, // true for 465, false for other ports
+    secure: process.env.MAIL_SMTP_SECURE ?? false, // true for 465, false for other ports
     auth: {
       user: process.env.MAIL_SMTP_USERNAME,
       pass: process.env.MAIL_SMTP_PASSWORD

@@ -122,6 +122,11 @@ Crop.hasOne(Auction, {
   as: "auction"
 })
 
+Crop.hasMany(Bid, {
+  foreignKey: "crop_id",
+  as: "bid"
+})
+
 CropSpecification.belongsTo(Crop, {
   foreignKey: 'model_id',
   as: 'crop'

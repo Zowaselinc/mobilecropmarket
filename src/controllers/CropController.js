@@ -273,6 +273,10 @@ class CropController {
                         model: Auction,
                         as: "auction",
                     },
+                    {
+                        model: Bid,
+                        as: "bid",
+                    },
                 ],
 
                 where: { type: "auction", active: 1 },
@@ -457,6 +461,10 @@ class CropController {
                             model: Auction,
                             as: "auction",
                         },
+                        {
+                            model: Bid,
+                            as: "bid",
+                        },
                     ],
 
                     where: { id: cropId },
@@ -631,6 +639,10 @@ class CropController {
                 },
                 {
                     model: Auction,
+                    as: "auction"
+                },
+                {
+                    model: Bid,
                     as: "auction"
                 },
                 {
