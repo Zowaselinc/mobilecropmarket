@@ -115,7 +115,7 @@ class AuthController {
                 error: true,
                 message: user.message
             });
-        } 
+        }  
 
         if (data.has_company) {
             var response = await AuthController.saveCompany(user, data);
