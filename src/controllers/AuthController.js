@@ -104,7 +104,7 @@ class AuthController {
         const data = req.body;
         console.log(data);
 
-        // Check if email or Phone no Exists @ s`aveuser()
+        // Check if email or Phone no Exists @ saveuser()
 
         let user = await AuthController.saveUser(data);
         console.log("log");
@@ -115,7 +115,7 @@ class AuthController {
                 error: true,
                 message: user.message
             });
-        }  
+        }
 
         if (data.has_company) {
             var response = await AuthController.saveCompany(user, data);
