@@ -29,10 +29,12 @@ const MeshSockets=(io)=>{
                     let currentstatus= await db.select('kycs',{user_id:data.userid});
                   
                     if(currentstatus.length==0){
-                        socket.emit(userschannel,{"userskycstatus":0});
+                        socket.emit(userschannel,{"userdidkyc":0, "userskycstatus":0});
+                        // socket.emit(userschannel,{"userskycstatus":0});
 
                     }else{
-                        socket.emit(userschannel,{"userskycstatus":currentstatus[0].verified});
+                        socket.emit(userschannel,{"userdidkyc":1, "userskycstatus":currentstatus[0].verified});
+                        // socket.emit(userschannel,{"userskycstatus":currentstatus[0].verified});
 
                     }
                     
