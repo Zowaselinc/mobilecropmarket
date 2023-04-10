@@ -22,7 +22,7 @@ const MeshSockets=(io)=>{
             })
             socket.on("kycperson",function(data){
                 let userschannel= "ZWSL"+data.userid;
-              
+            
 
                 setInterval(async () => {
                 // console.log(data.userid);
