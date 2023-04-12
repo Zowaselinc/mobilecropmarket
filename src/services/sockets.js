@@ -36,7 +36,7 @@ const MeshSockets=(io)=>{
                         socket.emit(userschannel,{"userdidkyc":1, "userskycstatus":currentstatus[0].verified});
                         // socket.emit(userschannel,{"userskycstatus":currentstatus[0].verified});
 
-                    }
+                    } 
                     
 
                 }, 3000);
