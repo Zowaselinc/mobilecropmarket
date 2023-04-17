@@ -122,6 +122,11 @@ Crop.hasOne(Auction, {
   as: "auction"
 })
 
+Auction.hasOne(Bid, {
+  foreignKey: "crop_id",
+  as: "bid"
+})
+
 Crop.hasMany(Bid, {
   foreignKey: "crop_id",
   as: "bid"

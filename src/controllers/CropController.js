@@ -12,6 +12,7 @@ const {
     SubCategory,
     Bid,
 } = require("~database/models");
+const { IncludeAuction } = require('~database/helpers/modelncludes');
 const md5 = require("md5");
 var appRoot = require("app-root-path");
 
@@ -639,11 +640,15 @@ class CropController {
                 },
                 {
                     model: Auction,
-                    as: "auction"
-                },
-                {
-                    model: Bid,
-                    as: "auction"
+                    required: false,
+                    as: "auction",
+                    include:[
+                        {
+                            model: Bid,
+                            required: false,
+                            as: "bid"
+                        },
+                    ]
                 },
                 {
                     model: User,
