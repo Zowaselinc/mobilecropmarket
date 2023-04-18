@@ -122,7 +122,7 @@ Crop.hasOne(Auction, {
   as: "auction"
 })
 
-Auction.hasOne(Bid, {
+Bid.belongsTo(Auction, {
   foreignKey: "crop_id",
   as: "bid"
 })

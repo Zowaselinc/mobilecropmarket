@@ -642,13 +642,13 @@ class CropController {
                     model: Auction,
                     required: false,
                     as: "auction",
-                    include:[
-                        {
-                            model: Bid,
-                            required: false,
-                            as: "bid"
-                        },
-                    ]
+                    // include:[
+                        
+                    // ]
+                },
+                {
+                    model: Bid,
+                    as: "bid"
                 },
                 {
                     model: User,
