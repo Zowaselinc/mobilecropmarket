@@ -1,5 +1,5 @@
 const { request } = require("express");
-const { Input, ErrorLog, Category, SubCategory } = require("~database/models");
+const { Input, ErrorLog, Category, SubCategory, User } = require("~database/models");
 const { validationResult } = require("express-validator");
 const crypto = require("crypto");
 const md5 = require("md5");
@@ -165,6 +165,7 @@ class InputProducts {
         include: [
           { model: Category, as: "category" },
           { model: SubCategory, as: "subcategory" },
+          { model: User, as: "user" },
         ],
       });
 
