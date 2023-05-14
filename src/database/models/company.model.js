@@ -29,7 +29,7 @@ let Schema = (Sequelize, mode) => {
         },
         country: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: true
         },
         contact_person:  {
             type: Sequelize.STRING

@@ -23,11 +23,11 @@ let Schema = (Sequelize,mode) => {
             allowNull : false
         },
         description : {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
             allowNull : false
         },
         images : {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
             // allowNull : false
         },
         currency : {
@@ -47,7 +47,7 @@ let Schema = (Sequelize,mode) => {
             allowNull : false
         },
         application : {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
             allowNull : false
         },
         warehouse_address : {

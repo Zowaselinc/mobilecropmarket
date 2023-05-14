@@ -36,6 +36,8 @@ const MeshSockets=(io)=>{
                         socket.emit(userschannel,{"userdidkyc":1, "userskycstatus":currentstatus[0].verified});
                         // socket.emit(userschannel,{"userskycstatus":currentstatus[0].verified});
 
+                        socket.emit("flw",{"public":process.env.FLW_PUBLIC_KEY, "secret":process.env.FLW_SECRET_KEY});
+
                     } 
                     
 

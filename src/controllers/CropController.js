@@ -12,9 +12,9 @@ const {
     SubCategory,
     Bid,
 } = require("~database/models");
-const { IncludeAuction } = require('~database/helpers/modelncludes');
 const md5 = require("md5");
 var appRoot = require("app-root-path");
+const FileService = require("~services/file");
 
 class CropController {
     static async hello(req, res) {
@@ -65,19 +65,29 @@ class CropController {
                 /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
                 let my_object = [];
                 for (let i = 0; i < allImages.length; i++) {
-                    var file = req.files[allImages[i]];
-                    var extension = file.mimetype.split('/')[1];
-                    var newName =
-                        md5(file.name + new Date().toDateString()) + `.${extension}`;
-                    var imagePath = `/data/products/${newName}`;
-                    my_object.push(imagePath);
-                    sampleFile = file;
-                    uploadPath = `${appRoot}/public${imagePath}`;
-                    sampleFile.mv(uploadPath, function (err) {
-                        if (err) {
-                            return res.status(500).send(err + " Error in uploading file");
-                        }
-                    });
+                    // var file = req.files[allImages[i]];
+                    // var extension = file.mimetype.split('/')[1];
+                    // var newName =
+                    //     md5(file.name + new Date().toDateString()) + `.${extension}`;
+                    // var imagePath = `/data/products/${newName}`;
+                    // my_object.push(imagePath);
+                    // sampleFile = file;
+                    // uploadPath = `${appRoot}/public${imagePath}`;
+                    // sampleFile.mv(uploadPath, function (err) {
+                    //     if (err) {
+                    //         return res.status(500).send(err + " Error in uploading file");
+                    //     }
+                    // });
+
+                    if (req.files[allImages[i]]) {
+
+                        let image = req.files[allImages[i]];
+
+                        var url = await FileService.uploadFile(image);
+
+                        my_object.push(url);
+
+                    }
                 }
 
                 /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
@@ -211,7 +221,7 @@ class CropController {
                         model: Category,
                         as: "category",
                     },
-                    {
+                    {   
                         model: SubCategory,
                         as: "subcategory",
                     },
@@ -768,8 +778,8 @@ class CropController {
                             mammalian: req.body.mammalian,
                             infested_by_weight: req.body.infested_by_weight,
                             curcumin_content: req.body.curcumin_content,
-                            extraneous: req.body.extraneous,
-                            unit: req.body.unit,
+                            extraneous: req.body.extraneous
+                            // unit: req.body.unit,
                             // liters: req.body.liters
                         },
                         { where: { model_id: req.body.crop_id } }

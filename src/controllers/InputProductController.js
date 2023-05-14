@@ -4,6 +4,7 @@ const { validationResult } = require("express-validator");
 const crypto = require("crypto");
 const md5 = require("md5");
 var appRoot = require("app-root-path");
+const FileService = require("~services/file");
 
 // const jwt = require("jsonwebtoken");
 
@@ -36,25 +37,29 @@ class InputProducts {
         /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
         let my_object = [];
         for (let i = 0; i < allImages.length; i++) {
-          var file = req.files[allImages[i]];
-          var extension = file.mimetype.split("/")[1];
-          var newName =
-            md5(file.name + new Date().toDateString()) + `.${extension}`;
-          var imagePath = `/data/products/${newName}`;
-          my_object.push(imagePath);
-          sampleFile = file;
-          uploadPath = `${appRoot}/public${imagePath}`;
-          sampleFile.mv(uploadPath, function (err) {
-            if (err) {
-              return res.status(500).send(err + " Error in uploading file");
-            } else {
-              // res.send('File uploaded!');
-              // image = "image"+i;
-              // my_object.image = "uploadPath"
-            }
-          });
+          // var file = req.files[allImages[i]];
+          // var extension = file.mimetype.split('/')[1];
+          // var newName =
+          //     md5(file.name + new Date().toDateString()) + `.${extension}`;
+          // var imagePath = `/data/products/${newName}`;
+          // my_object.push(imagePath);
+          // sampleFile = file;
+          // uploadPath = `${appRoot}/public${imagePath}`;
+          // sampleFile.mv(uploadPath, function (err) {
+          //     if (err) {
+          //         return res.status(500).send(err + " Error in uploading file");
+          //     }
+          // });
+
+          if (req.files[allImages[i]]) {
+
+            let image = req.files[allImages[i]];
+
+            var url = await FileService.uploadFile(image);
+
+            my_object.push(url);
+          }
         }
-        /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
 
         /* ------------------------ INSERT INTO PRODUCT TABLE ----------------------- */
         var input = await Input.create({
@@ -79,7 +84,7 @@ class InputProducts {
           delivery_method: req.body.delivery_method,
           expiry_date: req.body.expiry_date,
           manufacture_country: req.body.manufacture_country,
-          state: req.body.state,
+          // state: req.body.state,
           video: req.body.video,
           active: 1,
         });
@@ -122,6 +127,7 @@ class InputProducts {
             model: SubCategory,
             as: "subcategory",
           },
+          { model: User, as: "user" },
         ],
         where: {
           user_id: req.global.user.id,
