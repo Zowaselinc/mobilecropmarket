@@ -124,6 +124,8 @@ class TransactionController {
             const payload = { "id": transactionId }
             const response = await flw.Transaction.verify(payload)
 
+            console.log("response flw transaction", response);
+
             if (response.data.status == "successful") {
 
                 // CHECK FOR DUPLICATE TRANSACTION ENTRY
