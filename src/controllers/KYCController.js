@@ -6,6 +6,7 @@ var base64 = require('base64-stream');
 
 
 const { EncryptConfig, DecryptConfig } = require("~utilities/encryption/encrypt");
+const FileService = require("~services/file");
 class KYCController {
     /* ------------------------------  ----------------------------- */
     static async startKycVerification(req, res) {
@@ -59,9 +60,26 @@ class KYCController {
                     ...req.body
                 });
 
+                // console.log("applicant", applicant);
+                // console.log("req.body", req.body);
+
 
                 if (applicant) {
 
+                    let allImages = Object.keys(req.files);
+
+                    /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
+                    let my_object = [];
+                    for (let i = 0; i < allImages.length; i++) {
+                        if (req.files[allImages[i]]) {
+                            let image = req.files[allImages[i]];
+                            var url = await FileService.uploadFile(image);
+                            my_object.push(url);
+                        }
+                    }
+                    /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
+                    console.log("my_object", my_object);
+                    console.log("body", body);
                     //SAVES USER APPLICANT_ID
                     let userKyc;
                     try {
@@ -69,7 +87,10 @@ class KYCController {
                             user_id: userData.id,
                             applicant_id: applicant.id,
                             verified: 0,
-                            bvn: EncryptConfig(body.bvn)
+                            bvn: EncryptConfig(body.bvn),
+                            id_type: body.id_type,
+                            id_number: body.id_number,
+                            files: JSON.stringify(my_object)
                         });
                     } catch (error) {
                         console.log(error)

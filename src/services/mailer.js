@@ -11,52 +11,51 @@ const transporter = nodemailer.createTransport({
     port: process.env.MAIL_SMTP_PORT,
     secure: process.env.MAIL_SMTP_SECURE ?? false, // true for 465, false for other ports
     auth: {
-      user: process.env.MAIL_SMTP_USERNAME,
-      pass: process.env.MAIL_SMTP_PASSWORD
+        user: process.env.MAIL_SMTP_USERNAME,
+        pass: process.env.MAIL_SMTP_PASSWORD
     },
-    tls: {rejectUnauthorized: false}
-}); 
+    tls: { rejectUnauthorized: false }
+});
 
 
-class Mailer{
+class Mailer {
 
-    constructor(){
-        this.Mail = {text : ""};
+    constructor() {
+        this.Mail = { text: "" };
     }
 
-    from(from){
-        this.Mail.from = from;
+    from(from) {
+        this.Mail.from = `Zowasel <${from}>`;
         return this;
     }
 
 
-    subject(subject){
+    subject(subject) {
         this.Mail.subject = subject;
         return this;
     }
 
 
-    to(recipient){
+    to(recipient) {
         this.Mail.to = recipient;
         return this;
     }
 
-    text(text){
+    text(text) {
         this.Mail.text = text;
         return this;
     }
 
-    template(template, data = {}){
+    template(template, data = {}) {
         this.Mail.html = Utilities.loadTemplate(template, data);
         return this;
     }
 
-    async send(){
+    async send() {
         return await transporter.sendMail(this.Mail);
     }
 
-    
+
 }
 
 module.exports = () => new Mailer();
-

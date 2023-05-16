@@ -102,7 +102,7 @@ class AuthController {
         }
 
         const data = req.body;
-        console.log(data);
+        console.log("User data", data);
 
         // Check if email or Phone no Exists @ saveuser()
 
@@ -131,6 +131,7 @@ class AuthController {
         var UserTypeModel = data.user_type == "merchant" ? Merchant : Corporate;
        
         let change;
+        // If user registers as a merchant
         if (data.user_type == "merchant") {
            
             var merchantType = await MerchantType.findOne({ where: { title: 'grower' } });

@@ -21,6 +21,15 @@ let Schema = (Sequelize, mode) => {
         verified: {
             type: Sequelize.INTEGER
         },
+        id_type: {
+            type: Sequelize.STRING
+        },
+        id_number: {
+            type: Sequelize.STRING
+        },
+        files: {
+            type: Sequelize.TEXT
+        },
         ...generateTimestamps(Sequelize, mode)
     }
 }
