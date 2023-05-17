@@ -130,7 +130,7 @@ class AccountController {
                 company.save();
 
                 setTimeout(()=>{
-                    let theuser = await User.findOne({
+                    let theuser =  User.findOne({
                         where: { id: req.global.user.id },
                         
                             include: [
