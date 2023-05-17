@@ -162,6 +162,36 @@ class KYCController {
         });
     }
 
+    static async checkycStatus(req, res) {
+
+        var userData = req.global.user;
+        var kycDataObj, kybDataObj;
+
+        if (req.global.kyc) {
+            let data = req.global.kyc;
+            kycDataObj = data;
+        }
+        if (req.global.kyb) {
+            let data = req.global.kyb;
+            kybDataObj = data;
+        }
+
+        if (!kycDataObj) {
+            kycDataObj = null;
+        }
+        if (!kybDataObj) {
+            kybDataObj = null;
+        }
+            
+        return res.status(200).json({
+            error: false,
+            message: "KYC and KYB status fetched",
+            data: { kyc: kycDataObj, kyb: kybDataObj }
+        });
+        
+
+    }
+
     static async retriveCheck(req, res) {
 
         var userData = req.global.user;
