@@ -59,8 +59,20 @@ class KYCController {
                     ...req.body
                 });
 
-
+                
                 if (applicant) {
+
+                    let allImagess = Object.keys(req.files);
+
+                    /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
+                    let my_object = [];
+                    for (let i = 0; i < allImagess.length; i++) {
+                        if (req.files[allImagess[i]]) {
+                            let image = req.files[allImagess[i]];
+                            var url = await FileService.uploadFile(image);
+                            my_object.push(url);
+                        }
+                    }
 
                     //SAVES USER APPLICANT_ID
                     let userKyc;
@@ -71,7 +83,8 @@ class KYCController {
                             verified: 0,
                             bvn: EncryptConfig(body.bvn),
                             id_type: body.id_type,
-                            id_type: body.id_type
+                            id_number: body.id_number,
+                            files: JSON.stringify(my_object)
                         });
                     } catch (error) {
                         console.log(error)
