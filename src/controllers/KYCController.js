@@ -6,6 +6,7 @@ var base64 = require('base64-stream');
 
 
 const { EncryptConfig, DecryptConfig } = require("~utilities/encryption/encrypt");
+const FileService = require("~services/file");
 class KYCController {
     /* ------------------------------  ----------------------------- */
     static async startKycVerification(req, res) {
