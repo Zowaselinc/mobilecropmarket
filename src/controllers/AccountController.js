@@ -52,12 +52,23 @@ class AccountController {
                 ...(profileImagePath ? { image: profileImagePath } : {})
             }, {
                 where: { id: req.global.user.id }
-            })
+             })
 
             if (user) {
+        
+                let theuser = await User.findOne({
+                    where: { id: req.global.user.id },
+                    
+                            include: [
+                                { model: Company, as: "company" }
+                            ]
+                        
+                });
+
                 return res.status(200).json({
                     error: false,
                     message: "Account data updated successfully",
+                    data: theuser
                 });
             } else {
                 return res.status(400).json({
@@ -67,9 +78,9 @@ class AccountController {
             }
         } catch (e) {
             var logError = await ErrorLog.create({
-                error_name: "Error on add a crop",
+                error_name: "Error on updating acount details",
                 error_description: e.toString(),
-                route: "/api/crop/add",
+                route: "/api/users/account",
                 error_code: "500",
             });
             if (logError) {
