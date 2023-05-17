@@ -128,9 +128,9 @@ class AccountController {
                 company.company_website = req.body.company_website;
 
                 company.save();
-
-                setTimeout(()=>{
-                    let theuser =  User.findOne({
+                
+                if(company.save()){
+                    let theuser = await User.findOne({
                         where: { id: req.global.user.id },
                         
                             include: [
@@ -138,15 +138,14 @@ class AccountController {
                             ]
                             
                     });
-    
-    
+
+
                     return res.status(200).json({
                         error: false,
                         message: "Company data updated successfully",
                         data: theuser
                     });
-                },1000)
-                
+                }
             }
 
         } catch (e) {
