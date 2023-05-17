@@ -59,9 +59,9 @@ class AccountController {
                 let theuser = await User.findOne({
                     where: { id: req.global.user.id },
                     
-                            include: [
-                                { model: Company, as: "company" }
-                            ]
+                        include: [
+                            { model: Company, as: "company" }
+                        ]
                         
                 });
 
@@ -119,6 +119,7 @@ class AccountController {
             } else {
 
                 company.company_name = req.body.company_name;
+                company.country = req.body.company_country;
                 company.company_address = req.body.company_address;
                 company.company_email = req.body.email;
                 company.contact_person = req.body.contact_person;
@@ -128,9 +129,20 @@ class AccountController {
 
                 company.save();
 
+                let theuser = await User.findOne({
+                    where: { id: req.global.user.id },
+                    
+                        include: [
+                            { model: Company, as: "company" }
+                        ]
+                        
+                });
+
+
                 return res.status(200).json({
                     error: false,
                     message: "Company data updated successfully",
+                    data: theuser
                 });
             }
 
