@@ -60,8 +60,8 @@ class KYCController {
                     ...req.body
                 });
 
-                // console.log("applicant", applicant);
-                // console.log("req.body", req.body);
+                console.log("applicant", applicant);
+                console.log("req.body", req.body);
 
 
                 if (applicant) {
