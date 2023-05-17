@@ -129,8 +129,8 @@ class AccountController {
 
                 company.save();
                 
-                if(company.save()){
-                    let theuser = await User.findOne({
+                await setAsyncTimeout(() => {
+                    let theuser = User.findOne({
                         where: { id: req.global.user.id },
                         
                             include: [
@@ -145,7 +145,7 @@ class AccountController {
                         message: "Company data updated successfully",
                         data: theuser
                     });
-                }
+                },1000)
             }
 
         } catch (e) {
