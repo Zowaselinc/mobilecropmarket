@@ -129,23 +129,22 @@ class AccountController {
 
                 company.save();
                 
-                await setAsyncTimeout(() => {
-                    let theuser = User.findOne({
-                        where: { id: req.global.user.id },
+                
+                let theuser = await User.findOne({
+                    where: { id: req.global.user.id },
+                    
+                        include: [
+                            { model: Company, as: "company" }
+                        ]
                         
-                            include: [
-                                { model: Company, as: "company" }
-                            ]
-                            
-                    });
+                });
 
 
-                    return res.status(200).json({
-                        error: false,
-                        message: "Company data updated successfully",
-                        data: theuser
-                    });
-                },1000)
+                return res.status(200).json({
+                    error: false,
+                    message: "Company data updated successfully",
+                    data: theuser
+                });
             }
 
         } catch (e) {
