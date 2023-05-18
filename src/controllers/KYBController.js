@@ -114,10 +114,19 @@ class KYBController {
                         var url = await FileService.uploadFile(image);
 
                         pathlist.push(url);
+                        // console.log(url);
+                    }
 
+                    if (i == allImage.length - 1) {
+                        KYBController.savekyb(pathlist, userData, data, res);
+                        console.log("All image link created")              
+                    }else{
+                        // return res.status(500).send("Error in uploading file");
+                        console.log(`Image ${i+1} link created`);
                     }
                 }
 
+                
 
             } else {
 
@@ -134,7 +143,7 @@ class KYBController {
             if (logError) {
                 return res.status(500).json({
                     error: true,
-                    message: 'Unable to complete request at the moment. '+e.toString()
+                    message: 'Unable to complete request at the moment. '+error.toString()
                 })
             }
         }
