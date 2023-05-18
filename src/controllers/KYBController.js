@@ -2,7 +2,7 @@ var appRoot = require("app-root-path");
 const md5 = require("md5");
 const { validationResult } = require("express-validator");
 const { use } = require("~routes/api");
-const { KYB, Company } = require("~database/models");
+const { KYB, Company, ErrorLog } = require("~database/models");
 const fs = require('fs');
 const crypto = require('crypto');
 var FormData = require('form-data');
@@ -124,7 +124,19 @@ class KYBController {
             }
            
         } catch (error) {
-            console.log(error);
+            console.log(error.toString());
+            var logError = await ErrorLog.create({
+                error_name: "Error on starting KYB verification",
+                error_description: error.toString(),
+                route: "/api/account/kyb",
+                error_code: "500"
+            });
+            if (logError) {
+                return res.status(500).json({
+                    error: true,
+                    message: 'Unable to complete request at the moment. '+e.toString()
+                })
+            }
         }
     }
 
