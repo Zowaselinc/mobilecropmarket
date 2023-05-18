@@ -15,8 +15,6 @@ const MeshSockets=(io)=>{
      
     io.on("connection",function (socket){
           
-        
-
             socket.on("isconnected",function(data){
                 console.log(data);
             })
@@ -38,7 +36,7 @@ const MeshSockets=(io)=>{
                             userdidkyb = 0;
                         }else{ userdidkyb = 1 }
                         socket.emit(userschannel,{"userdidkyc":1, "userskycstatus":kyccurrentstatus[0].verified,
-                            "userdidkyb":userdidkyb, "userskybstatus":kybcurrentstatus[0].verified
+                            "userdidkyb":userdidkyb, "userskybstatus":kybcurrentstatus[0].status
                         });
                         // socket.emit(userschannel,{"userskycstatus":kyccurrentstatus[0].verified});
 
