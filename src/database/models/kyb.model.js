@@ -10,13 +10,13 @@ let Schema = (Sequelize, mode) => {
             type: Sequelize.STRING
         },
         cac: {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
         },
         financial_statement: {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
         },
         mou: {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
         },
         check_id: {
             type: Sequelize.STRING
