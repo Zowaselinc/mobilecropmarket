@@ -109,7 +109,7 @@ class KYBController {
 
                     if (req.files[allImage[i]]) {
 
-                        let image = req.files[allImages[i]];
+                        let image = req.files[allImage[i]];
 
                         var url = await FileService.uploadFile(image);
 
