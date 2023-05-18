@@ -8,6 +8,7 @@ const crypto = require('crypto');
 var FormData = require('form-data');
 
 const axios = require('axios');
+const FileService = require("~services/file");
 
 
 class KYBController {
@@ -55,49 +56,68 @@ class KYBController {
             if (req.files && Object.keys(req.files).length > 0) {
                 let allImage = Object.keys(req.files);
 
-                for (let index = 0; index < allImage.length; index++) {
-                    const key = allImage[index]; //eg. cac
-                    let file = req.files[key]; //eg. full file details of cac
-                    let extension = file.mimetype.split("/")[1];
-                    let newName =
-                        md5(file.name + new Date().toDateString()) + `.${extension}`;
-                    let path = `${appRoot}/public/data/kyb/${userData.id}`;
-                    if (!fs.existsSync(path)) { //if file no file path creat one with the user id
-                        fs.mkdirSync(path);
-                    }
-                    let sampleFile = file;
-                    let profileImagePath = `${path}/${newName}`;
-                    let uploadPath = `${profileImagePath}`;
+                // for (let index = 0; index < allImage.length; index++) {
+                //     const key = allImage[index]; //eg. cac
+                //     let file = req.files[key]; //eg. full file details of cac
+                //     let extension = file.mimetype.split("/")[1];
+                //     let newName =
+                //         md5(file.name + new Date().toDateString()) + `.${extension}`;
+                //     let path = `${appRoot}/public/data/kyb/${userData.id}`;
+                //     if (!fs.existsSync(path)) { //if file no file path creat one with the user id
+                //         fs.mkdirSync(path);
+                //     }
+                //     let sampleFile = file;
+                //     let profileImagePath = `${path}/${newName}`;
+                //     let uploadPath = `${profileImagePath}`;
 
-                    sampleFile.mv(uploadPath, async function (err) {
-                        const images = fs.createReadStream(uploadPath);
-                        const form = new FormData();
-                        form.append("image", images)
+                //     sampleFile.mv(uploadPath, async function (err) {
+                //         const images = fs.createReadStream(uploadPath);
+                //         const form = new FormData();
+                //         form.append("image", images)
 
-                        const response = await axios.post('https://filesapi.growsel.com/upload.php', form
-                        );
-                        console.log(uploadPath);
-                        fs.unlink(uploadPath, function(err) {
-                            if (err) {
-                            //   throw err
-                             console.log(err.toString())
-                            } else {
-                            //   console.log("Successfully deleted the file.")
-                            }
-                          })
-                        //   Note if 2 files has the same name unlink will show that one of the file directory is not found bcos the first one has already been deleted
-                        pathlist.push(response.data.data.imageLink);
+                //         const response = await axios.post('https://filesapi.growsel.com/upload.php', form
+                //         );
+                //         console.log(uploadPath);
+                //         fs.unlink(uploadPath, function(err) {
+                //             if (err) {
+                //             //   throw err
+                //              console.log(err.toString())
+                //             } else {
+                //             //   console.log("Successfully deleted the file.")
+                //             }
+                //           })
+                //         //   Note if 2 files has the same name unlink will show that one of the file directory is not found bcos the first one has already been deleted
+                //         pathlist.push(response.data.data.imageLink);
 
-                        if (index == allImage.length - 1) {
-                            KYBController.savekyb(pathlist, userData, data, res)
+                //         if (index == allImage.length - 1) {
+                //             KYBController.savekyb(pathlist, userData, data, res)
                            
-                        }
+                //         }
 
-                        if (err) {
-                            return res.status(500).send(err + " Error in uploading file");
-                        }
-                    });
+                //         if (err) {
+                //             return res.status(500).send(err + " Error in uploading file");
+                //         }
+                //     });
+
+
+                // }
+
+
+                /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
+                // let my_object = [];
+                for (let i = 0; i < allImage.length; i++) {
+
+                    if (req.files[allImage[i]]) {
+
+                        let image = req.files[allImages[i]];
+
+                        var url = await FileService.uploadFile(image);
+
+                        pathlist.push(url);
+
+                    }
                 }
+
 
             } else {
 
