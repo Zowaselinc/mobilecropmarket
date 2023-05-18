@@ -15,6 +15,8 @@ const MeshSockets=(io)=>{
      
     io.on("connection",function (socket){
           
+        
+
             socket.on("isconnected",function(data){
                 console.log(data);
             })
@@ -24,21 +26,15 @@ const MeshSockets=(io)=>{
 
                 setInterval(async () => {
                 // console.log(data.userid);
-                    let kyccurrentstatus= await db.select('kycs',{user_id:data.userid});
-                    let kybcurrentstatus= await db.select('kybs',{user_id:data.userid});
+                    let currentstatus= await db.select('kycs',{user_id:data.userid});
                   
-                    if(kyccurrentstatus.length==0){
+                    if(currentstatus.length==0){
                         socket.emit(userschannel,{"userdidkyc":0, "userskycstatus":0});
                         // socket.emit(userschannel,{"userskycstatus":0});
+
                     }else{
-                        let userdidkyb;
-                        if(kybcurrentstatus.length==0){
-                            userdidkyb = 0;
-                        }else{ userdidkyb = 1 }
-                        socket.emit(userschannel,{"userdidkyc":1, "userskycstatus":kyccurrentstatus[0].verified,
-                            "userdidkyb":userdidkyb, "userskybstatus":kybcurrentstatus[0].status
-                        });
-                        // socket.emit(userschannel,{"userskycstatus":kyccurrentstatus[0].verified});
+                        socket.emit(userschannel,{"userdidkyc":1, "userskycstatus":currentstatus[0].verified});
+                        // socket.emit(userschannel,{"userskycstatus":currentstatus[0].verified});
 
                         socket.emit("flw",{"public":process.env.FLW_PUBLIC_KEY, "secret":process.env.FLW_SECRET_KEY});
                         
