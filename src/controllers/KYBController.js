@@ -26,41 +26,53 @@ class KYBController {
                     data: errors,
                 });
             }
-            var fileKeys = Object.keys(req.files);
+            // var fileKeys = Object.keys(req.files);
 
-            if (!fileKeys.includes('cac')) {
-                return res.status(400).json({
-                    error: true,
-                    message: "CAC Document is required",
-                });
-            }
+            // if (!fileKeys.includes('cac')) {
+            //     return res.status(400).json({
+            //         error: true,
+            //         message: "CAC Document is required",
+            //     });
+            // }
 
-            if (!fileKeys.includes('financial_statement')) {
-                return res.status(400).json({
-                    error: true,
-                    message: "Financial Statement Document is required",
-                });
-            }
+            // if (!fileKeys.includes('financial_statement')) {
+            //     return res.status(400).json({
+            //         error: true,
+            //         message: "Financial Statement Document is required",
+            //     });
+            // }
 
-            if (!fileKeys.includes('mou')) {
-                return res.status(400).json({
-                    error: true,
-                    message: "MOU Document is required",
-                });
-            }
+            // if (!fileKeys.includes('mou')) {
+            //     return res.status(400).json({
+            //         error: true,
+            //         message: "MOU Document is required",
+            //     });
+            // }
+            
+            // if (req.files && Object.keys(req.files).length > 0) {
+            //     let allImage = Object.keys(req.files);
+
+            //     for (let index = 0; index < allImage.length; index++) {
+            //         const key = allImage[index];
+            //         let file = req.files[key];
+            //         var uploaded = await FileService.uploadFile(file);
+            //         pathlist.push(uploaded);
+            //     }
+            //     await KYBController.savekyb(pathlist, userData, data, res);
+
+            // } else {
+
+            // }
             var userData = req.global.user;
             var data = req.body;
-            var pathlist = []
-            if (req.files && Object.keys(req.files).length > 0) {
-                let allImage = Object.keys(req.files);
-
-                for (let index = 0; index < allImage.length; index++) {
-                    const key = allImage[index];
-                    let file = req.files[key];
-                    var uploaded = await FileService.uploadFile(file);
-                    pathlist.push(uploaded);
-                }
-                await KYBController.savekyb(pathlist, userData, data, res);
+            var pathlist = [];
+            if (data.cac && data.financial_statement && data.mou) {
+               
+                pathlist.push(data.cac); pathlist.push(data.financial_statement); pathlist.push(data.mou);
+                
+                if(pathlist.length==3){
+                    await KYBController.savekyb(pathlist, userData, data, res);
+                }else{  }
 
             } else {
 
@@ -167,7 +179,8 @@ class KYBController {
                         contact_person: company_details.contact_person,
                         website: company_details.company_website,
                         tax_id: kybDataObj.tax_id,
-                    }
+                    },
+                    companydata: company_details
                 });
             } else {
                 return res.status(200).json({
