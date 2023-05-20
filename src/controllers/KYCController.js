@@ -64,6 +64,9 @@ class KYCController {
                 if (applicant) {
                     //SAVES USER APPLICANT_ID
                     let userKyc;
+
+                    var obj = new Object();
+                    obj = {"front":body.img1, "back":body.img2}
                     try {
                         userKyc = await KYC.create({
                             user_id: userData.id,
@@ -72,7 +75,7 @@ class KYCController {
                             bvn: EncryptConfig(body.bvn),
                             id_type: body.id_type,
                             id_number: body.id_number,
-                            files: {"front":body.img1, "back":body.img2}
+                            files: JSON.stringify(obj)
                         });
                     } catch (error) {
                         console.log(error)
