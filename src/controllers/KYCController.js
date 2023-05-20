@@ -62,7 +62,6 @@ class KYCController {
 
                 
                 if (applicant) {
-
                     //SAVES USER APPLICANT_ID
                     let userKyc;
                     try {
@@ -71,8 +70,8 @@ class KYCController {
                             applicant_id: applicant.id,
                             verified: 0,
                             bvn: EncryptConfig(body.bvn),
-                            id_type: body.id_type,
-                            id_number: body.id_number
+                            id_type: OnfidoInstance.IDTypes[req.body.id_type.toUpperCase()],
+                            id_number: req.body.id_number
                         });
                     } catch (error) {
                         console.log(error)
@@ -103,18 +102,20 @@ class KYCController {
 
                 /* ---------------------------- CHECKS DOCUMENTS ---------------------------- */
                 let allImages = Object.keys(req.files);
+                let uploadedUrls = {};
                 for (let index = 0; index < allImages.length; index++) {
                     const imageKey = allImages[index];
                     var uploaded = await OnfidoInstance.uploadDocument(req.files[imageKey], imageKey);
-
+                    var imageUrl = await FileService.uploadFile(req.files[imageKey]);
+                    uploadedUrls[imageKey] = imageUrl;
                 }
                 var response = await OnfidoInstance.checkDocument();
                 if (response) {
                     try {
-
                         const user = await KYC.update({
                             status: "pending",
                             check_id: response.id,
+                            files: JSON.stringify(uploadedUrls)
                         }, { where: { user_id: userData.id } });
 
                     } catch (error) {
