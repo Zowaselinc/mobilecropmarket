@@ -81,7 +81,7 @@ class KYCController {
                         console.log(error)
                     }
 
-
+ 
                 } else {
                     return res.status(400).json({
                         error: true,
