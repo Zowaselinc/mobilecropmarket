@@ -71,7 +71,8 @@ class KYCController {
                             verified: 0,
                             bvn: EncryptConfig(body.bvn),
                             id_type: body.id_type,
-                            id_number: body.id_number
+                            id_number: body.id_number,
+                            files: {"front":body.img1, "back":body.img2}
                         });
                     } catch (error) {
                         console.log(error)
