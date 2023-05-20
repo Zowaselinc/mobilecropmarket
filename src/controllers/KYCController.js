@@ -70,8 +70,8 @@ class KYCController {
                             applicant_id: applicant.id,
                             verified: 0,
                             bvn: EncryptConfig(body.bvn),
-                            id_type: OnfidoInstance.IDTypes[req.body.id_type.toUpperCase()],
-                            id_number: req.body.id_number
+                            id_type: body.id_type,
+                            id_number: body.id_number
                         });
                     } catch (error) {
                         console.log(error)
