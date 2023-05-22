@@ -11,6 +11,10 @@ module.exports = {
         body('address').isString().notEmpty(),
     ],
 
+    updateProfilePictureValidator: [
+        body('image').isString().notEmpty(),
+    ],
+
     updateCompanyValidator: [
         body('company_name').isString().notEmpty(),
         body('company_address').isString().notEmpty(),
