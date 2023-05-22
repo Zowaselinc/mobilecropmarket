@@ -109,12 +109,12 @@ class AccountController {
             }
 
             
-            if (!req.files || Object.keys(req.files).length === 0) {
-                return res.status(400).json({
-                    "error": true,
-                    "message": "No files were uploaded."
-                });
-            } else {
+            // if (!req.files || Object.keys(req.files).length === 0) {
+            //     return res.status(400).json({
+            //         "error": true,
+            //         "message": "No files were uploaded."
+            //     });
+            // } else {
                 let allImages = Object.keys(req.files);
                 /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
                 let my_object = [];
@@ -128,7 +128,7 @@ class AccountController {
                 /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
                 
                 const user = await User.update({
-                    image: JSON.stringify(my_object) 
+                    image: req.body.image 
                 }, {
                     where: { id: req.global.user.id }
                 })
@@ -154,7 +154,7 @@ class AccountController {
                     });
                 }
 
-            }
+            // }
           
         } catch (e) {
             var logError = await ErrorLog.create({
@@ -173,7 +173,7 @@ class AccountController {
         }
     }
 
-    
+
 
     static async updateCompanyDetails(req, res) {
 
