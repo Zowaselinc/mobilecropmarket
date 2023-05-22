@@ -3,6 +3,7 @@ const { Crop, ErrorLog, Order, User, Company } = require("~database/models");
 const bcrypt = require('bcryptjs');
 var appRoot = require("app-root-path");
 const md5 = require("md5");
+const FileService = require("~services/file");
 
 class AccountController {
     /* ------------------------------  ----------------------------- */
@@ -25,20 +26,21 @@ class AccountController {
 
                 let image = Object.keys(req.files)[0];
 
-                var file = req.files[image];
-                var extension = file.mimetype.split("/")[1];
-                var newName =
-                    md5(file.name + new Date().toDateString()) + `.${extension}`;
-                profileImagePath = `/data/profile/${newName}`;
+                // var file = req.files[image];
+                // var extension = file.mimetype.split("/")[1];
+                // var newName =
+                //     md5(file.name + new Date().toDateString()) + `.${extension}`;
+                // profileImagePath = `/data/profile/${newName}`;
 
-                sampleFile = file;
-                uploadPath = `${appRoot}/public${profileImagePath}`;
+                // sampleFile = file;
+                // uploadPath = `${appRoot}/public${profileImagePath}`;
 
-                sampleFile.mv(uploadPath, function (err) {
-                    if (err) {
-                        return res.status(500).send(err + " Error in uploading file");
-                    }
-                });
+                // sampleFile.mv(uploadPath, function (err) {
+                //     if (err) {
+                //         return res.status(500).send(err + " Error in uploading file");
+                //     }
+                // });
+                var url = await FileService.uploadFile(image);
             }
 
             const user = await User.update({
@@ -49,7 +51,8 @@ class AccountController {
                 city: req.body.city,
                 country: req.body.country,
                 primary_address: req.body.address,
-                ...(profileImagePath ? { image: profileImagePath } : {})
+                // ...(profileImagePath ? { image: profileImagePath } : {})
+                ...(url ? { image: url } : {})
             }, {
                 where: { id: req.global.user.id }
              })
@@ -93,6 +96,84 @@ class AccountController {
     }
 
 
+    static async updateAccountProfilePicture(req, res) {
+        const errors = validationResult(req);
+
+        try {
+            if (!errors.isEmpty()) {
+                return res.status(400).json({
+                    error: true,
+                    message: "All fields are required",
+                    data: errors,
+                });
+            }
+
+            
+            if (!req.files || Object.keys(req.files).length === 0) {
+                return res.status(400).json({
+                    "error": true,
+                    "message": "No files were uploaded."
+                });
+            } else {
+                let allImages = Object.keys(req.files);
+                /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
+                let my_object = [];
+                for (let i = 0; i < allImages.length; i++) {
+                    if (req.files[allImages[i]]) {
+                        let image = req.files[allImages[i]];
+                        var url = await FileService.uploadFile(image);
+                        my_object.push(url);
+                    }
+                }
+                /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
+                
+                const user = await User.update({
+                    image: JSON.stringify(my_object) 
+                }, {
+                    where: { id: req.global.user.id }
+                })
+
+                if (user) {
+            
+                    let theuser = await User.findOne({
+                        where: { id: req.global.user.id },
+                        include: [
+                            { model: Company, as: "company" }
+                        ]    
+                    });
+
+                    return res.status(200).json({
+                        error: false,
+                        message: "Profile picture updated successfully",
+                        data: theuser
+                    });
+                } else {
+                    return res.status(400).json({
+                        error: true,
+                        message: "Could not update user profile picture",
+                    });
+                }
+
+            }
+          
+        } catch (e) {
+            var logError = await ErrorLog.create({
+                error_name: "Error on updating profile picture",
+                error_description: e.toString(),
+                route: "/api/users/account/profilepicture",
+                error_code: "500",
+            });
+            if (logError) {
+                console.log(e);
+                return res.status(500).json({
+                    error: true,
+                    message: "Unable to complete request at the moment",
+                });
+            }
+        }
+    }
+
+
     static async updateCompanyDetails(req, res) {
 
         const errors = validationResult(req);
@@ -127,24 +208,25 @@ class AccountController {
                 company.state = req.body.state;
                 company.company_website = req.body.company_website;
 
-                company.save();
-                
-                
-                let theuser = await User.findOne({
-                    where: { id: req.global.user.id },
+                // company.save();
+                if(company.save()){
+                    setTimeout(async function(){
+                        let theuser = await User.findOne({
+                            where: { id: req.global.user.id },
+                            include: [
+                                { model: Company, as: "company" }
+                            ]  
+                        });
+
+                        return res.status(200).json({
+                            error: false,
+                            message: "Company data updated successfully",
+                            data: theuser
+                        });
+                    },2000)
                     
-                        include: [
-                            { model: Company, as: "company" }
-                        ]
-                        
-                });
-
-
-                return res.status(200).json({
-                    error: false,
-                    message: "Company data updated successfully",
-                    data: theuser
-                });
+                }
+                
             }
 
         } catch (e) {

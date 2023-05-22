@@ -345,7 +345,7 @@ class AuthController {
 
 
 
-    static async saveCompany(user, data) {
+    static async save(user, data) {
         let company;
 
         try {

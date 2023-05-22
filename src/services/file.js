@@ -9,6 +9,7 @@ const axios = require('axios');
 class FileService {
 
     static async uploadFile(file) {
+        // console.log("File to send to third party", file);
         let extension = file.mimetype.split("/")[1];
         let newName =
             md5(file.name + new Date().toDateString()) + `.${extension}`;

@@ -114,6 +114,8 @@ Router.middleware(['isAuthenticated']).group((router) => {
     // Account Settings 
 
     router.post('/users/account', AccountValidator.updateAccountValidator, AccountController.updateAccountDetails);
+
+    router.post('/users/account/profilepicture', AccountController.updateAccountProfilePicture);
     
     router.post('/users/account/company', AccountValidator.updateCompanyValidator, AccountController.updateCompanyDetails);
 
