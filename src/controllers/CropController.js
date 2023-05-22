@@ -42,7 +42,7 @@ class CropController {
             }
             var type = req.params.type;
 
-            if (type != 'wanted' && type != "sale" && type != 'auction') {
+            if (type != 'wanted' && type != "sale" && type != 'auction') {  
                 return res.status(400).json({
                     "error": true,
                     "message": "Invalid type",
@@ -54,41 +54,48 @@ class CropController {
                 type = "offer";
             }
 
-            if (!req.files || Object.keys(req.files).length === 0) {
-                return res.status(400).json({
-                    "error": true,
-                    "message": "No files were uploaded."
-                });
-            } else {
-                let allImages = Object.keys(req.files);
+            // if (!req.files || Object.keys(req.files).length === 0) {
+                //     return res.status(400).json({
+                    //         "error": true,
+                    //         "message": "No files were uploaded."
+                    //     });
+                    // } else {
+            var data = req.body;
+            if (data.image1 && data.image2 && data.image3 && data.image4 && data.image5) {
+                // let allImages = Object.keys(req.files);
 
                 /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
                 let my_object = [];
-                for (let i = 0; i < allImages.length; i++) {
-                    // var file = req.files[allImages[i]];
-                    // var extension = file.mimetype.split('/')[1];
-                    // var newName =
-                    //     md5(file.name + new Date().toDateString()) + `.${extension}`;
-                    // var imagePath = `/data/products/${newName}`;
-                    // my_object.push(imagePath);
-                    // sampleFile = file;
-                    // uploadPath = `${appRoot}/public${imagePath}`;
-                    // sampleFile.mv(uploadPath, function (err) {
-                    //     if (err) {
-                    //         return res.status(500).send(err + " Error in uploading file");
-                    //     }
-                    // });
+                my_object.push(data.image1);
+                my_object.push(data.image2);
+                my_object.push(data.image3);
+                my_object.push(data.image4);
+                my_object.push(data.image5);
+                // for (let i = 0; i < allImages.length; i++) {
+                //     // var file = req.files[allImages[i]];
+                //     // var extension = file.mimetype.split('/')[1];
+                //     // var newName =
+                //     //     md5(file.name + new Date().toDateString()) + `.${extension}`;
+                //     // var imagePath = `/data/products/${newName}`;
+                //     // my_object.push(imagePath);
+                //     // sampleFile = file;
+                //     // uploadPath = `${appRoot}/public${imagePath}`;
+                //     // sampleFile.mv(uploadPath, function (err) {
+                //     //     if (err) {
+                //     //         return res.status(500).send(err + " Error in uploading file");
+                //     //     }
+                //     // });
 
-                    if (req.files[allImages[i]]) {
+                //     if (req.files[allImages[i]]) {
 
-                        let image = req.files[allImages[i]];
+                //         let image = req.files[allImages[i]];
 
-                        var url = await FileService.uploadFile(image);
+                //         var url = await FileService.uploadFile(image);
 
-                        my_object.push(url);
+                //         my_object.push(url);
 
-                    }
-                }
+                //     }
+                // }
 
                 /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
 
@@ -189,7 +196,7 @@ class CropController {
                     error: true,
                     message: 'Unable to complete request at the moment. '+e.toString()
                 })
-            }
+            }1
         }
     }
     // /* ---------------------------- * ADD Cropdescription * ---------------------------- */
