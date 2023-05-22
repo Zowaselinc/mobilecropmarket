@@ -102,16 +102,11 @@ class AuthController {
         }
 
         const data = req.body;
-        console.log("User data", data);
-
-        // Check if email or Phone no Exists @ saveuser()
-
         let user = await AuthController.saveUser(data);
-        console.log("log");
 
         if (user.error) {
-            console.log(user, "User")
-            return res.status(200).json({
+            console.log(user)
+            return res.status(400).json({
                 error: true,
                 message: user.message
             });
@@ -120,7 +115,7 @@ class AuthController {
         if (data.has_company) {
             var response = await AuthController.saveCompany(user, data);
             if (response.error) {
-                
+
                 return res.status(400).json({
                     error: true,
                     message: response.message
@@ -129,18 +124,17 @@ class AuthController {
         }
 
         var UserTypeModel = data.user_type == "merchant" ? Merchant : Corporate;
-       
+
         let change;
-        // If user registers as a merchant
         if (data.user_type == "merchant") {
-           
+
             var merchantType = await MerchantType.findOne({ where: { title: 'grower' } });
             if (merchantType) {
                 change = { type_id: merchantType.id };
             }
         } else {
             change = { type: "red-hot" };
-            
+
         }
 
         await UserTypeModel.create({ ...change, ...{ user_id: user.id } }).catch((error => {
@@ -169,6 +163,7 @@ class AuthController {
         });
 
     }
+    
 
     static async registerAgent(req, res) {
 
@@ -296,56 +291,36 @@ class AuthController {
         let encryptedPassword = await bcrypt.hash(data.password, 10);
 
         try {
-            const checkUser = await User.findOne({where:{
-                [Op.or]: [
-                    {email:data.email},
-                    {phone: data.phone}
-                ],
-            }});
+            user = await User.create({
+                first_name: data.first_name,
+                last_name: data.last_name,
+                phone: data.phone,
+                email: data.email,
+                is_verified: 0,
+                status: 1,
+                password: encryptedPassword,
+                type: data.user_type,
+                account_type: data.has_company || data.company_email ? "company" : "individual",
+            });
 
-            if(checkUser){
-                user = {
-                    error: "true",
-                    message: `User with email or phone number already exists`
-                } 
-            }else{
-                user = await User.create({
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    phone: data.phone,
-                    email: data.email,
-                    is_verified: 0,
-                    status: 1,
-                    password: encryptedPassword,
-                    type: data.user_type,
-                    account_type: data.has_company || data.company_email ? "company" : "individual",
-                   
-                });
-    
-                // Create user wallet
-                let wallet = await Wallet.create({
-                    user_id: user.id,
-                    balance: 0
-                });
-            }
-            
+            // Create user wallet
+            let wallet = await Wallet.create({
+                user_id: user.id,
+                balance: 0
+            });
 
         } catch (e) {
-          
+
             user = {
                 error: true,
-                // message: e.sqlMessage
-                message: e.toString()
+                message: e.sqlMessage
             }
         }
 
         return user;
     }
 
-
-
-
-    static async save(user, data) {
+    static async saveCompany(user, data) {
         let company;
 
         try {
@@ -355,15 +330,13 @@ class AuthController {
                 company_address: data.company_address,
                 company_phone: data.company_phone,
                 company_email: data.company_email,
-                country:data.company_country,
                 state: data.company_state,
                 rc_number: data.rc_number
             });
         } catch (e) {
             company = {
                 error: true,
-                // message: e.sqlMessage
-                message: e.toString()
+                message: e.sqlMessage
             }
         }
 
