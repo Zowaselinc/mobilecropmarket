@@ -173,6 +173,7 @@ class AccountController {
         }
     }
 
+    
 
     static async updateCompanyDetails(req, res) {
 
