@@ -25,41 +25,46 @@ class InputProducts {
           data: [],
         });
       }
-      if (!req.files || Object.keys(req.files).length === 0) {
+      // if (!req.files || Object.keys(req.files).length === 0) {
+      if (!req.body.images) {
         return res.status(400).json({
           error: true,
-          message: "No input images(s) found.",
+          message: "No input image(s) found.",
           data: [],
         });
       } else {
-        let allImages = Object.keys(req.files);
+        // let allImages = Object.keys(req.files);
 
         /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
-        let my_object = [];
-        for (let i = 0; i < allImages.length; i++) {
-          // var file = req.files[allImages[i]];
-          // var extension = file.mimetype.split('/')[1];
-          // var newName =
-          //     md5(file.name + new Date().toDateString()) + `.${extension}`;
-          // var imagePath = `/data/products/${newName}`;
-          // my_object.push(imagePath);
-          // sampleFile = file;
-          // uploadPath = `${appRoot}/public${imagePath}`;
-          // sampleFile.mv(uploadPath, function (err) {
-          //     if (err) {
-          //         return res.status(500).send(err + " Error in uploading file");
-          //     }
-          // });
+        // let my_object = [];
+        // for (let i = 0; i < allImages.length; i++) {
+        //   // var file = req.files[allImages[i]];
+        //   // var extension = file.mimetype.split('/')[1];
+        //   // var newName =
+        //   //     md5(file.name + new Date().toDateString()) + `.${extension}`;
+        //   // var imagePath = `/data/products/${newName}`;
+        //   // my_object.push(imagePath);
+        //   // sampleFile = file;
+        //   // uploadPath = `${appRoot}/public${imagePath}`;
+        //   // sampleFile.mv(uploadPath, function (err) {
+        //   //     if (err) {
+        //   //         return res.status(500).send(err + " Error in uploading file");
+        //   //     }
+        //   // });
 
-          if (req.files[allImages[i]]) {
+        //   if (req.files[allImages[i]]) {
 
-            let image = req.files[allImages[i]];
+        //     let image = req.files[allImages[i]];
 
-            var url = await FileService.uploadFile(image);
+        //     var url = await FileService.uploadFile(image);
 
-            my_object.push(url);
-          }
-        }
+        //     my_object.push(url);
+        //   }
+        // }
+
+        // Jst like php explode to change each item to string and be in an array, I will use split in JS
+        let images = req.body.images;
+        let imgArray = images.split(',');
 
         /* ------------------------ INSERT INTO PRODUCT TABLE ----------------------- */
         var input = await Input.create({
@@ -76,7 +81,7 @@ class InputProducts {
           kilograms: req.body.kilograms,
           grams: req.body.grams,
           liters: req.body.liters,
-          images: JSON.stringify(my_object),
+          images: JSON.stringify(imgArray),
           price: req.body.price,
           currency: req.body.currency,
           manufacture_name: req.body.manufacture_name,
