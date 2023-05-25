@@ -61,16 +61,19 @@ class CropController {
                     //     });
                     // } else {
             var data = req.body;
-            if (data.image1 && data.image2 && data.image3 && data.image4 && data.image5) {
+            // if (data.image1 && data.image2 && data.image3 && data.image4 && data.image5) {
+            if (data.images) {
+                let images = data.images;
+                let imgArray = images.split(',');
                 // let allImages = Object.keys(req.files);
 
                 /* -------------------------- MOVE UPLOADED FOLDER -------------------------- */
-                let my_object = [];
-                my_object.push(data.image1);
-                my_object.push(data.image2);
-                my_object.push(data.image3);
-                my_object.push(data.image4);
-                my_object.push(data.image5);
+                // let my_object = [];
+                // my_object.push(data.image1);
+                // my_object.push(data.image2);
+                // my_object.push(data.image3);
+                // my_object.push(data.image4);
+                // my_object.push(data.image5);
                 // for (let i = 0; i < allImages.length; i++) {
                 //     // var file = req.files[allImages[i]];
                 //     // var extension = file.mimetype.split('/')[1];
@@ -109,7 +112,7 @@ class CropController {
                     active: 1,
                     market: "crop",
                     description: req.body.description,
-                    images: JSON.stringify(my_object),
+                    images: JSON.stringify(imgArray),
                     currency: req.body.currency,
                     is_negotiable: req.body.is_negotiable,
                     video: req.body.video,

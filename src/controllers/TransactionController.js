@@ -178,7 +178,8 @@ class TransactionController {
                                     transaction_ref: transactionRef,
                                     type: "order",
                                     type_id: order.id,
-                                    recipient_id: JSON.parse(order.products)[0].user_id,
+                                    recipient_id: order.buyer_id != JSON.parse(order.products)[0].user_id ? 
+                                                    JSON.parse(order.products)[0].user_id : JSON.parse(order.products)[0].input.user_id,
                                     amount_paid: response.data.amount,
                                     status: "completed"
                                 });
@@ -200,7 +201,8 @@ class TransactionController {
                                     transaction_ref: transactionRef,
                                     type: "order",
                                     type_id: order.id,
-                                    recipient_id: JSON.parse(order.products)[0].user_id,
+                                    recipient_id: order.buyer_id != JSON.parse(order.products)[0].user_id ? 
+                                        JSON.parse(order.products)[0].user_id : JSON.parse(order.products)[0].input.user_id,
                                     amount_paid: order.total,
                                     status: "completed"
                                 });
@@ -213,7 +215,11 @@ class TransactionController {
                                 var order = await Order.findOne({
                                     where: { order_hash: req.body.order[i] }
                                 });
-                                var wallet = await Wallet.findOne({ where: { user_id: JSON.parse(order.products)[0].user_id } });
+                                var wallet = await Wallet.findOne({ where: { 
+                                    user_id: order.buyer_id != JSON.parse(order.products)[0].user_id ? 
+                                        JSON.parse(order.products)[0].user_id : JSON.parse(order.products)[0].input.user_id, 
+                                } 
+                                });
                                 wallet.balance = eval(wallet.balance) + eval(JSON.parse(order.products)[i].price);
                                 await wallet.save();
                             }
@@ -221,7 +227,11 @@ class TransactionController {
                             var order = await Order.findOne({
                                 where: { order_hash: req.body.order }
                             });
-                            var wallet = await Wallet.findOne({ where: { user_id: JSON.parse(order.products)[0].user_id } });
+                            var wallet = await Wallet.findOne({ where: { 
+                                user_id: order.buyer_id != JSON.parse(order.products)[0].user_id ? 
+                                    JSON.parse(order.products)[0].user_id : JSON.parse(order.products)[0].input.user_id, 
+                            } 
+                            });
                             wallet.balance = eval(wallet.balance) + eval(response.data.amount);
                             await wallet.save();
                         }
