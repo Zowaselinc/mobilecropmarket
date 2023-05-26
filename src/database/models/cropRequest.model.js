@@ -29,7 +29,7 @@ let Schema = (Sequelize,mode) => {
         // },
         // delivery_date : {
         //     type: Sequelize.STRING,
-        //     allowNull : true
+        //     allowNull : true 
         // },
         delivery_window : {
             type: Sequelize.STRING,
