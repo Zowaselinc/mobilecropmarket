@@ -113,7 +113,7 @@ module.exports = {
         body('infested_by_weight').isNumeric(),
         body('curcumin_content').isNumeric(),
         body('extraneous').isNumeric(),
-        body('unit').optional(),
+        // body('unit').optional(),
         // body('kg').isNumeric(),
         // body('liters').isNumeric(),
     ],

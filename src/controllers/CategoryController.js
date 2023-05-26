@@ -34,12 +34,21 @@ class CategoryController {
 
             };
 
-            var categories = await Category.findAll({
-                where: {
-                    type: req.params.type
-                },
-                ...countOptions
-            });
+            var categories;
+            if(req.params.type !== "crop_focus"){
+                categories = await Category.findAll({
+                    where: {
+                        type: req.params.type
+                    },
+                    ...countOptions
+                });
+            }else{
+                categories = await Category.findAll({
+                    where: {
+                        type: req.params.type
+                    }
+                });
+            }
 
             if (categories.length > 0) {
                 ``
