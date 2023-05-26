@@ -641,15 +641,16 @@ class CropController {
     static async getByTypeandUserID(req, res) {
         try {
             var findCrops = await Crop.findAndCountAll({
-                include: [{
-                    model: CropSpecification,
-                    as: 'specification',
-                    where: { model_type: "crop" },
-                },
-                // {
-                //     model: Category,
-                //     as: "category"
+                include: [
+                //     {
+                //     model: CropSpecification,
+                //     as: 'specification',
+                //     where: { model_type: "crop" },
                 // },
+                {
+                    model: Category,
+                    as: "category"
+                },
                 // {
                 //     model: SubCategory,
                 //     as: "subcategory"
