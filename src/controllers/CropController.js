@@ -641,41 +641,39 @@ class CropController {
     static async getByTypeandUserID(req, res) {
         try {
             var findCrops = await Crop.findAndCountAll({
-                include: [
-                //     {
-                //     model: CropSpecification,
-                //     as: 'specification',
-                //     where: { model_type: "crop" },
-                // },
+                include: [{
+                    model: CropSpecification,
+                    as: 'specification',
+                    where: { model_type: "crop" },
+                },
                 {
                     model: Category,
                     as: "category"
                 },
-                // {
-                //     model: SubCategory,
-                //     as: "subcategory"
-                // },
-                // {
-                //     model: CropRequest,
-                //     as: 'crop_request',
-                // },
-                // {
-                //     model: Auction,
-                //     required: false,
-                //     as: "auction",
-                //     // include:[
+                {
+                    model: SubCategory,
+                    as: "subcategory"
+                },
+                {
+                    model: CropRequest,
+                    as: 'crop_request',
+                },
+                {
+                    model: Auction,
+                    required: false,
+                    as: "auction",
+                    // include:[
                         
-                //     // ]
-                // },
-                // {
-                //     model: Bid,
-                //     as: "bid"
-                // },
-                // {
-                //     model: User,
-                //     as: 'user'
-                // }
-            ],
+                    // ]
+                },
+                {
+                    model: Bid,
+                    as: "bid"
+                },
+                {
+                    model: User,
+                    as: 'user'
+                }],
 
                 where: { type: req.params.type, user_id: req.global.user.id },
                 order: [["id", "DESC"]],
