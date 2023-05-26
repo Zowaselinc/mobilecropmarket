@@ -803,7 +803,7 @@ class CropController {
                                 zip: req.body.zip,
                                 country: req.body.country,
                                 address: req.body.address,
-                                delivery_method: req.body.delivery_method,
+                                // delivery_method: req.body.delivery_method,
                                 delivery_date: req.body.delivery_date,
                                 delivery_window: req.body.delivery_window,
                             },
