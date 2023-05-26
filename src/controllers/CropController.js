@@ -679,16 +679,23 @@ class CropController {
 
                 where: { type: req.params.type, user_id: req.global.user.id },
                 order: [["id", "DESC"]],
-                group: ["id"]
+                // group: ["id"]
             });
 
             /* --------------------- If fetched the Wanted Crops --------------------- */
 
-            return res.status(200).json({
-                error: false,
-                message: "Crops grabbed successfully",
-                data: findCrops,
-            });
+            if(findCrops){
+                return res.status(200).json({
+                    error: false,
+                    message: "Crops grabbed successfully",
+                    data: findCrops,
+                });
+            }else{
+                return res.status(200).json({
+                    error: true,
+                    message: "No crop added yet"
+                });
+            }
         } catch (error) {
             var logError = await ErrorLog.create({
                 error_name: "Error on fetching crop wanted",
