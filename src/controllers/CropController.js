@@ -804,7 +804,7 @@ class CropController {
                                 country: req.body.country,
                                 address: req.body.address,
                                 // delivery_method: req.body.delivery_method,
-                                delivery_date: req.body.delivery_date,
+                                // delivery_date: req.body.delivery_date,
                                 delivery_window: req.body.delivery_window,
                             },
                             { where: { crop_id: req.body.crop_id } }
