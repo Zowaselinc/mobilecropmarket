@@ -646,30 +646,30 @@ class CropController {
                     as: 'specification',
                     where: { model_type: "crop" },
                 },
-                {
-                    model: Category,
-                    as: "category"
-                },
-                {
-                    model: SubCategory,
-                    as: "subcategory"
-                },
-                {
-                    model: CropRequest,
-                    as: 'crop_request',
-                },
-                {
-                    model: Auction,
-                    required: false,
-                    as: "auction",
-                    // include:[
+                // {
+                //     model: Category,
+                //     as: "category"
+                // },
+                // {
+                //     model: SubCategory,
+                //     as: "subcategory"
+                // },
+                // {
+                //     model: CropRequest,
+                //     as: 'crop_request',
+                // },
+                // {
+                //     model: Auction,
+                //     required: false,
+                //     as: "auction",
+                //     // include:[
                         
-                    // ]
-                },
-                {
-                    model: Bid,
-                    as: "bid"
-                },
+                //     // ]
+                // },
+                // {
+                //     model: Bid,
+                //     as: "bid"
+                // },
                 // {
                 //     model: User,
                 //     as: 'user'
