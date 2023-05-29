@@ -343,7 +343,7 @@ class CropController {
                     data: []
                 })
             } else {
-                var findCropOffers = await Crop.findAndCountAll({
+                var findCropOffers = await Crop.findAll({
                     include: [
                         {
                             model: CropSpecification,
@@ -365,23 +365,15 @@ class CropController {
                     ],
                     where: { type: "offer", active: 1 },
                     order: [['id', 'DESC']],
-                    group: ["id"]
+                    // group: ["id"]
                 });
 
                 /* --------------------- If fetched the Wanted Crops --------------------- */
                 if(findCropOffers){
-                    if(findCropOffers.rows.length>0){
-                        return res.status(200).json({
-                            error: false,
-                            message: "Crops offer grabbed successfully",
-                            data: findCropOffers
-                        });
-                    }
-                }else{
                     return res.status(200).json({
                         error: false,
-                        message: "No crop offer yet",
-                        data: []
+                        message: "Crops offer grabbed successfully",
+                        data: findCropOffers
                     });
                 }
             }
