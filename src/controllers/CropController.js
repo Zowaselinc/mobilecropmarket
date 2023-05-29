@@ -302,16 +302,24 @@ class CropController {
 
                 where: { type: "auction", active: 1 },
                 order: [["id", "DESC"]],
-                group: ["id"]
+                // group: ["id"]
             });
 
             /* --------------------- If fetched the Wanted Crops --------------------- */
 
-            return res.status(200).json({
-                error: false,
-                message: "Crops auctions grabbed successfully",
-                data: findCropAuctions,
-            });
+            if(findCropAuctions){
+                return res.status(200).json({
+                    error: false,
+                    message: "Crops auctions grabbed successfully",
+                    data: findCropAuctions,
+                });
+            }else{
+                return res.status(200).json({
+                    error: true,
+                    message: "No Crops for auction yet",
+                    data: [],
+                });
+            }
         } catch (error) {
             var logError = await ErrorLog.create({
                 error_name: "Error on fetching crop wanted",
