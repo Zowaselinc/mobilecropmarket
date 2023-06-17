@@ -3,6 +3,7 @@ const { Crop, ErrorLog, Order, User, Company, KYC, VfdWallet } = require("~datab
 const bcrypt = require('bcryptjs');
 const OnfidoInstance = require("~providers/Onfido");
 var base64 = require('base64-stream');
+const axios = require('axios');
 
 
 const { EncryptConfig, DecryptConfig } = require("~utilities/encryption/encrypt");
@@ -144,7 +145,6 @@ class KYCController {
                             lastname:body.last_name,
                             middlename:"",
                             dob:body.dob,
-                            address:body.address,
                             gender:body.gender,
                             phone:body.phone,
                             bvn:body.bvn
