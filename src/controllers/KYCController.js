@@ -149,45 +149,51 @@ class KYCController {
                             phone:body.phone,
                             bvn:body.bvn
                         };
+                        let VFD_ACCESS_TOKEN = "8762fd77-a43a-3402-b0da-2da62e51efb8";
                         const config = {
                             headers: {
-                                'Authorization': `Bearer ${process.env.VFD_ACCESS_TOKEN}`,
+                                // 'Authorization': `Bearer ${process.env.VFD_ACCESS_TOKEN}`,
+                                'Authorization': `Bearer ${VFD_ACCESS_TOKEN}`,
                             }
                         };
 
                         /* ------------------------------ AXIOS REQUEST ----------------------------- */
+                        let VFD_BASE_URL = "https://api-devapps.vfdbank.systems/vtech-wallet/api/v1";
+                        let VFD_WALLET_CREDENTIALS = "YkpudnVnRVVnTEJfYldLZGZqazVUMG04TXE0YTo0ODJhZDJhUUhrV0JmekJaRjJBVVR2NWY5a29h";
                         // await axios.post(process.env.VFD_BASE_URL+
                         //     "/wallet2/clientdetails/create?wallet-credentials="+process.env.VFD_WALLET_CREDENTIALS, 
-                        //     requestData, config)
-                        // .then(response => {
+                        await axios.post(VFD_BASE_URL+
+                            "/wallet2/clientdetails/create?wallet-credentials="+VFD_WALLET_CREDENTIALS, 
+                            requestData, config)
+                        .then(response => {
                             
-                        //     const responseData = response.data;
-                        //     const data = responseData.data;
-                        //     const accountNum = data.accountNo;
+                            const responseData = response.data;
+                            const data = responseData.data;
+                            const accountNum = data.accountNo;
             
-                        //     let vfdWallet = VfdWallet.create({
-                        //         user_id:user.id,
-                        //         account_number:accountNum
-                        //     });
-                        //     if(vfdWallet){
-                        //         // res.status(200).json({
-                        //         //     error:false,
-                        //         //     message: "Wallet created successfully",
-                        //         //     data: {accountNo:accountNum}
-                        //         // })
-                        //     }else{
-                        //         res.status(400).json({
-                        //             error:true,
-                        //             message:"Request failed"
-                        //         })
-                        //     }
+                            let vfdWallet = VfdWallet.create({
+                                user_id:user.id,
+                                account_number:accountNum
+                            });
+                            if(vfdWallet){
+                                // res.status(200).json({
+                                //     error:false,
+                                //     message: "Wallet created successfully",
+                                //     data: {accountNo:accountNum}
+                                // })
+                            }else{
+                                res.status(400).json({
+                                    error:true,
+                                    message:"Request failed"
+                                })
+                            }
             
                             
-                        // })
-                        // .catch(error => {
-                        // // Handle any errors
-                        //     res.status(500).json({ error: 'An error occurred: ' + error});
-                        // });
+                        })
+                        .catch(error => {
+                        // Handle any errors
+                            res.status(500).json({ error: 'An error occurred: ' + error});
+                        });
                         /* ------------------------------ AXIOS REQUEST ----------------------------- */
                     }
 
