@@ -55,6 +55,8 @@ const AccountValidator = require("./validators/AccountValidator");
 const KYCController = require("~controllers/KYCController");
 const KYBController = require("~controllers/KYBController");
 const AccountController = require("~controllers/AccountController");
+const VfdwalletValidator = require("./validators/VfdwalletValidator");
+const VfdwalletController = require("~controllers/VfdwalletController");
 
 
 
@@ -333,6 +335,16 @@ Router.middleware('isAuthenticated').group((router) => {
     router.get('/wallet/transactions/:transaction_id', WalletController.getOneTransaction);
 })
 
+/* ------------------------------ VFD WALLET ROUTES ----------------------------- */
+
+Router.middleware('isAuthenticated').group((router) => {
+    router.post('/vfdwallet/create', VfdwalletValidator.createwalletValidator, VfdwalletController.createVfdaccount);
+    // router.get('/vfdwallet/transactions/recent', VfdwalletController.getRecentTransactions);
+    // router.get('/vfdwallet/transactions/allrecent', VfdwalletController.getAllRecentTransactions);
+    // router.get('/vfdwallet/transactions/:transaction_id', VfdwalletController.getOneTransaction);
+})
+
+
 /* ------------------------------ ANALYTICS ROUTES ----------------------------- */
 
 Router.middleware('isAuthenticated').group((router) => {
@@ -348,5 +360,8 @@ Router.middleware(['isLandingRefered']).group((router) => {
     router.get('/load/cropoffers', CropController.getByCropOffer);
     router.get('/load/inputs', InputController.getallInputs);
 });
+
+
+
 
 module.exports = Router;

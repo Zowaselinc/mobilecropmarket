@@ -20,6 +20,7 @@ const Mailer = require('~services/mailer');
 const md5 = require("md5");
 const { reset } = require("nodemon");
 const { use } = require("~routes/api");
+const SendgridMailer = require('~services/sendgrid');
 require('dotenv').config();
 
 const crypto = require("crypto");
@@ -451,27 +452,53 @@ class OrderController {
 
             // Send offer accepted email
             var offerOwner = products[0].type == "wanted" ? buyer : seller;
-            Mailer()
-                .to(offerOwner.email).from(process.env.MAIL_FROM)
-                .subject('Crop offer accepted').template('emails.AcceptedCropOffer', {
-                    name: offerOwner.first_name,
-                    cropQuantity: crop.specification.qty + crop.specification.test_weight,
-                    cropTitle: crop.subcategory.name + "-" + crop.specification.color,
-                    orderLink: `${refererUrl}dashboard/marketplace/order/${createOrder.order_hash}`,
-                    orderHash: createOrder.order_hash
-                }).send();
+            // Mailer()
+            //     .to(offerOwner.email).from(process.env.MAIL_FROM)
+            //     .subject('Crop offer accepted').template('emails.AcceptedCropOffer', {
+            //         name: offerOwner.first_name,
+            //         cropQuantity: crop.specification.qty + crop.specification.test_weight,
+            //         cropTitle: crop.subcategory.name + "-" + crop.specification.color,
+            //         orderLink: `${refererUrl}dashboard/marketplace/order/${createOrder.order_hash}`,
+            //         orderHash: createOrder.order_hash
+            //     }).send();
+            let from = process.env.SENDGRID_MAIL_FROM;
+            let to = offerOwner.email;
+            let subject = 'Crop offer accepted';
+            let text = '';
+            let dynamicTemplateData = {
+                name: offerOwner.first_name,
+                cropQuantity: crop.specification.qty + crop.specification.test_weight,
+                cropTitle: crop.subcategory.name + "-" + crop.specification.color,
+                orderLink: `${refererUrl}dashboard/marketplace/order/${createOrder.order_hash}`,
+                orderHash: createOrder.order_hash
+            }
+            let template = 'emails.AcceptedCropOffer';
+            await SendgridMailer.sendMail(from,to,subject,text,template, dynamicTemplateData);
 
             // Send offer confimation email
             var offerFulfiler = products[0].type == "wanted" ? seller : buyer;
-            Mailer()
-                .to(offerFulfiler.email).from(process.env.MAIL_FROM)
-                .subject('Offer confirmation').template('emails.OfferConfirmation', {
+            // Mailer()
+            //     .to(offerFulfiler.email).from(process.env.MAIL_FROM)
+            //     .subject('Offer confirmation').template('emails.OfferConfirmation', {
+            //         name: offerFulfiler.first_name,
+            //         cropQuantity: crop.specification.qty + crop.specification.test_weight,
+            //         cropTitle: crop.subcategory.name + "-" + crop.specification.color,
+            //         orderLink: `${refererUrl}dashboard/marketplace/order/${createOrder.order_hash}`,
+            //         orderHash: createOrder.order_hash
+            //     }).send();
+                let from2 = process.env.SENDGRID_MAIL_FROM;
+                let to2 = offerFulfiler.email;
+                let subject2 = 'Offer confirmation';
+                let text2 = '';
+                let dynamicTemplateData2 = {
                     name: offerFulfiler.first_name,
                     cropQuantity: crop.specification.qty + crop.specification.test_weight,
                     cropTitle: crop.subcategory.name + "-" + crop.specification.color,
                     orderLink: `${refererUrl}dashboard/marketplace/order/${createOrder.order_hash}`,
                     orderHash: createOrder.order_hash
-                }).send();
+                }
+                let template2 = 'emails.OfferConfirmation';
+                await SendgridMailer.sendMail(from2,to2,subject2,text2,template2, dynamicTemplateData2);
 
             return res.status(200).json({
                 error: false,
@@ -811,9 +838,108 @@ class OrderController {
                     waybill_details: theWaybillDetails
                 }, { where: { order_hash: req.params.order } });
 
+                let orderProduct = JSON.parse(findOrder.products);
+                let products = await Crop.findAll({
+                    include: CropIncludes,
+                    where: {
+                        id: orderProduct[0].id
+                    }
+                });
+
+                let orderamt = findOrder.total;
+                let orderedproduct = JSON.parse(findOrder.products);
+                let orderedprice = orderedproduct[0].specification.price;
+                let orderedqty = orderamt/orderedprice;
+
+                // Pick up the last item in the product array BCOS the last one is the one agreed on
+                let thelastproduct = orderedproduct.at(-1);
+
+                // Send waybill document email
+                var buyer = await User.findByPk(findOrder.buyer_id);
+                var seller = await User.findByPk(findOrder.seller_id);
+
+                var offerOwner = products[0].type == "wanted" ? buyer : seller;
+                var offerFulfiler = products[0].type == "wanted" ? seller : buyer;
+                let from = process.env.SENDGRID_MAIL_FROM;
+                let to = "offerOwner.email";
+                let to2 = offerFulfiler.email;
+                let subject = 'Waybill Document Uploaded';
+                let text = '';
+                let dynamicTemplateData = {
+                    name: offerOwner.first_name,
+                    cropQuantity: orderedqty + "("+products[0].specification.test_weight+")",
+                    cropTitle: products[0].subcategory.name + "-" + products[0].specification.color,
+                    orderLink: "",
+                    orderHash: req.params.order,
+
+                    w_from: JSON.parse(theWaybillDetails).dispatch_section.from,
+                    w_to: JSON.parse(theWaybillDetails).dispatch_section.to,
+                    w_date: JSON.parse(theWaybillDetails).dispatch_section.date,
+                    w_cosignee: JSON.parse(theWaybillDetails).dispatch_section.cosignee,
+                    w_truckno: JSON.parse(theWaybillDetails).dispatch_section.truck_number,  
+                    
+                    product_description: thelastproduct.description,
+                    product_quantity: orderedqty,
+
+                    w_crop1: thelastproduct.subcategory.name+" - "+thelastproduct.specification.color,
+                    w_crop1qty: thelastproduct.specification.qty,
+                    w_remark: JSON.parse(theWaybillDetails).dispatch_section.remarks,
+                    w_drivername: JSON.parse(theWaybillDetails).dispatch_section.drivers_data.drivers_name,
+                    w_drivingicense: "#"+JSON.parse(theWaybillDetails).dispatch_section.drivers_data.driving_license,
+                    w_sellerRepname: JSON.parse(theWaybillDetails).dispatch_section.sellers_data.sellers_representative,
+                    w_sellertitle: JSON.parse(theWaybillDetails).dispatch_section.sellers_data.title,
+                    w_todaydate: new Date().toJSON().split('T')[0],
+                    // 
+                    w_receiptremark: JSON.parse(theWaybillDetails).receipt_section.remarks,
+                    w_receipt_sellerRep: JSON.parse(theWaybillDetails).receipt_section.sellers_data.sellers_representative,
+                    w_receipt_receiveBy: JSON.parse(theWaybillDetails).receipt_section.recipient_data.received_by,
+                    w_receipt_sellerTitle: JSON.parse(theWaybillDetails).receipt_section.sellers_data.title,
+                    w_receipt_receiverTitle: JSON.parse(theWaybillDetails).receipt_section.recipient_data.title,
+                }
+                let template = 'emails.UpdatedWaybillDocument';
+                await SendgridMailer.sendMail(from,to,subject,text,template, dynamicTemplateData);
+
+                let dynamicTemplateData2 = {
+                    name: offerFulfiler.first_name,
+                    cropQuantity: orderedqty + "("+products[0].specification.test_weight+")",
+                    cropTitle: products[0].subcategory.name + "-" + products[0].specification.color,
+                    orderLink: "",
+                    orderHash: req.params.order,
+
+                    w_from: JSON.parse(theWaybillDetails).dispatch_section.from,
+                    w_to: JSON.parse(theWaybillDetails).dispatch_section.to,
+                    w_date: JSON.parse(theWaybillDetails).dispatch_section.date,
+                    w_cosignee: JSON.parse(theWaybillDetails).dispatch_section.cosignee,
+                    w_truckno: JSON.parse(theWaybillDetails).dispatch_section.truck_number,  
+                    
+                    product_description: thelastproduct.description,
+                    product_quantity: orderedqty,
+
+                    w_crop1: thelastproduct.subcategory.name+" - "+thelastproduct.specification.color,
+                    w_crop1qty: thelastproduct.specification.qty,
+                    w_remark: JSON.parse(theWaybillDetails).dispatch_section.remarks,
+                    w_drivername: JSON.parse(theWaybillDetails).dispatch_section.drivers_data.drivers_name,
+                    w_drivingicense: "#"+JSON.parse(theWaybillDetails).dispatch_section.drivers_data.driving_license,
+                    w_sellerRepname: JSON.parse(theWaybillDetails).dispatch_section.sellers_data.sellers_representative,
+                    w_sellertitle: JSON.parse(theWaybillDetails).dispatch_section.sellers_data.title,
+                    w_todaydate: new Date().toJSON().split('T')[0],
+                    // 
+                    w_receiptremark: JSON.parse(theWaybillDetails).receipt_section.remarks,
+                    w_receipt_sellerRep: JSON.parse(theWaybillDetails).receipt_section.sellers_data.sellers_representative,
+                    w_receipt_receiveBy: JSON.parse(theWaybillDetails).receipt_section.recipient_data.received_by,
+                    w_receipt_sellerTitle: JSON.parse(theWaybillDetails).receipt_section.sellers_data.title,
+                    w_receipt_receiverTitle: JSON.parse(theWaybillDetails).receipt_section.recipient_data.title,
+                }
+                await SendgridMailer.sendMail(from,to2,subject,text,template, dynamicTemplateData2);
+
                 return res.status(200).json({
                     error: false,
                     message: "Waybill order details updated successfully",
+                    waybill_details: theWaybillDetails,
+                    findOrder: findOrder,
+                    products: products,
+                    orderedproduct:orderedproduct,
+                    orderedprice: orderedprice,
                     data: []
                 })
 
@@ -834,7 +960,7 @@ class OrderController {
             if (logError) {
                 return res.status(500).json({
                     error: true,
-                    message: 'Unable to complete request at the moment'
+                    message: 'Unable to complete request at the moment'+e.toString()
                 })
             }
         }

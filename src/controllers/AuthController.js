@@ -5,8 +5,10 @@ const { User, Company, AccessToken, Merchant, Partner, Corporate, Agent, UserCod
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const Mailer = require('~services/mailer');
+const SendgridMailer = require('~services/sendgrid');
+const IPAddr = require('~services/ipaddress');
 const md5 = require('md5');
-require('dotenv').config();
+require('dotenv').config(); 
 
 class AuthController {
 
@@ -63,15 +65,45 @@ class AuthController {
             );
             await AuthController.saveToken(user, token, req);
             //  userType.user.password;
-            const ipAddresses = req.header('x-forwarded-for');
-            let ipAddress = typeof ipAddresses == 'object' ? ipAddresses[0] : ipAddresses;
-            Mailer()
-                .to(user.email).from(process.env.MAIL_FROM)
-                .subject('New Login').template('emails.LoginNotification', {
-                    ipaddress: ipAddress,
-                    timestamp: (new Date()).toLocaleString(),
-                    name: user.first_name + " " + user.last_name,
-                }).send();
+            // const ipAddresses = req.header('x-forwarded-for');
+            // let ipAddress = typeof ipAddresses == 'object' ? ipAddresses[0] : ipAddresses;
+            let ipAddress = await IPAddr.getIPAddress();
+            // console.log("vredfv", ipAddress)
+            // NB: If a function in JavaScript returns a promise and a value, you can extract just the value from the returned result using async/await or .then() syntax.
+
+            // Mailer()
+            //     .to(user.email).from(process.env.MAIL_FROM)
+            //     .subject('New Login').template('emails.LoginNotification', {
+            //         ipaddress: ipAddress,
+            //         timestamp: (new Date()).toLocaleString(),
+            //         name: user.first_name + " " + user.last_name,
+            //     }).send();
+            
+            let from = process.env.SENDGRID_MAIL_FROM;
+            let to = user.email;
+            let subject = 'New Login';
+            let text = '';
+            let dynamicTemplateData = {
+                ipaddress: ipAddress,
+                timestamp: (new Date()).toLocaleString(),
+                name: user.first_name + ' ' + user.last_name
+            }
+            let template = 'emails.LoginNotification';
+            
+
+            let emailresult = await SendgridMailer.sendMail(from,to,subject,text,template, dynamicTemplateData);
+            // console.log("emailresult",emailresult);
+
+
+            
+            // const msg = {
+            //     to: 'ezukachibueze@gmail.com', // Change to your recipient from: 'webservices@zowasel.com', // Change to your verified sender
+            //     subject: 'New Login', text: 'and easy to do anywhere, even with Node.js', html: 'emails.LoginNotification',
+            //   }
+            //   SendgridMailer().send(msg);
+            // .then(() => {console.log('Email sent')})
+            // .catch((error) => {console.error(error)})
+
             return res.status(200).json({
                 error: false,
                 message: "Login Successful",
@@ -84,7 +116,6 @@ class AuthController {
                 message: "Invalid credentials"
             });
         }
-
 
 
     }
@@ -152,9 +183,18 @@ class AuthController {
 
         await AuthController.saveToken(user, token, req);
 
-        Mailer()
-            .to(data.email).from(process.env.MAIL_FROM)
-            .subject('Welcome').template('emails.WelcomeEmail').send();
+        // Mailer()
+        //     .to(data.email).from(process.env.MAIL_FROM)
+        //     .subject('Welcome').template('emails.WelcomeEmail').send();
+
+        let from = process.env.SENDGRID_MAIL_FROM;
+        let to = data.email;
+        let subject = 'Welcome';
+        let text = '';
+        let dynamicTemplateData = {}
+        let template = 'emails.WelcomeEmail';
+        
+        await SendgridMailer.sendMail(from,to,subject,text,template, dynamicTemplateData);
 
         res.status(200).json({
             status: true,
@@ -203,9 +243,17 @@ class AuthController {
             });
         });
 
-        Mailer()
-            .to(data.email).from(process.env.MAIL_FROM)
-            .subject('Welcome').template('emails.WelcomeEmail').send();
+        // Mailer()
+        //     .to(data.email).from(process.env.MAIL_FROM)
+        //     .subject('Welcome').template('emails.WelcomeEmail').send();
+        let from = process.env.SENDGRID_MAIL_FROM;
+        let to = data.email;
+        let subject = 'Welcome';
+        let text = '';
+        let dynamicTemplateData = {}
+        let template = 'emails.WelcomeEmail';
+        
+        await SendgridMailer.sendMail(from,to,subject,text,template, dynamicTemplateData);
 
 
         const token = jwt.sign(
@@ -266,9 +314,17 @@ class AuthController {
             });
         }));;
 
-        Mailer()
-            .to(data.email).from(process.env.MAIL_FROM)
-            .subject('Welcome').template('emails.WelcomeEmail').send();
+        // Mailer()
+        //     .to(data.email).from(process.env.MAIL_FROM)
+        //     .subject('Welcome').template('emails.WelcomeEmail').send();
+        let from = process.env.SENDGRID_MAIL_FROM;
+        let to = data.email;
+        let subject = 'Welcome';
+        let text = '';
+        let dynamicTemplateData = {}
+        let template = 'emails.WelcomeEmail';
+        
+        await SendgridMailer.sendMail(from,to,subject,text,template, dynamicTemplateData);
 
         const token = jwt.sign(
             { user_id: user.id },

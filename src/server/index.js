@@ -23,7 +23,7 @@ const http = require ('http',{
 /* -------------------------------------------- CREATE SOCKET IO INSTANCE ------------------------------------------- */
 
 
-const Routes = require('~routes');
+const Routes = require('../routes');
 
 const {DB} = require("~database/models");
 

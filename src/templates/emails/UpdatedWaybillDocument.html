@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waybill Document Uploaded</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Radio+Canada&display=swap" rel="stylesheet">
+    <style type="text/css">
+        body {
+    margin:0;
+    background-color:#ffffff
+}
+table{
+    border-spacing:0;
+    width: 100%;
+}
+img{
+    border:0;
+}
+.wrapper{
+    width:100%;
+    table-layout:fixed;
+    background-color:#ffffff;
+    padding-bottom:60px;
+}
+.main{
+    background-color:#ffffff;
+    margin:0 auto;
+    width:100%;
+    max-width:600px;
+    border-spacing:0;
+    border-radius: 7px;
+    font-family: 'Radio Canada', sans-serif;
+    color: #171a1b;
+    padding-top: 60px;
+    border: 1px #616161;
+}
+
+.two-columns{
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    height: 120px;
+    background-color: #008D40;
+    border-radius: 7px 7px 0 0;
+    padding: 0;
+}
+.two-columns .column{
+    width: 100%;
+    max-width: 300px;
+    display:inline;
+    vertical-align: top;
+    text-align: center;
+}       
+.logo{
+    width: 100%;
+    max-width: 600px;
+    height: 39px;
+    padding-top:10px;
+}
+.tablecontainer{
+    width: 65%;
+    height: 200px;
+    margin: auto;
+    background-color: #EEEEEE;
+    margin-bottom: 50px;
+}
+.tableheader{
+    width: 191px;
+    height: 32px;
+    padding-top: 10px;
+    border-bottom: 1px solid #616161;
+    color: #6A6A6A;
+    font-weight: 700;
+    font-size: 19px;
+    font-family: 'Radio Canada', sans-serif;
+    Font-style: Bold;
+    line-height: 31.67px;  
+}
+.tablecontent{
+    color: #616161;
+    Font-family: 'Radio Canada', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    Line-height: 27px;
+    text-align: center;
+}
+.tablecontent-2{
+    color: #616161;
+    Font-family: 'Radio Canada', sans-serif;
+    font-size: 16px;
+    Line-height: 27px;
+    padding-left: 35px;
+    text-align: center;
+    padding: 15px 1px 10px 5px;
+}
+.button-dark{
+    background-color: #008D40;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 15px 32px;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 295px;
+}
+p.otp-header{
+    color: #1D1D1D;
+    font-weight: 700;
+    font-size: 36px;
+    font-family: 'Radio Canada', sans-serif;
+    Font-style: Bold;
+    line-height: 50.4px;  
+}
+
+p.body{
+    color: #616161;
+    Font-family: 'Radio Canada', sans-serif;
+    font-size: 16px;
+    font-weight: 500px;
+    Line-height: 27px;
+    text-align: center;
+    padding-bottom: 10px;
+    width:568px;
+    height: 27px;
+}
+p.body-2{
+    color: #616161;
+    Font-family: 'Radio Canada', sans-serif;
+    font-size: 16px;
+    font-weight: 500px;
+    Line-height: 27px;
+    text-align: center;
+    padding-bottom: 60px;
+    width:100%;
+    max-width: fit-content;
+    height: 27px;
+    margin: 0 auto;
+    /* table-layout: fixed; */
+}
+p.bodymid{
+    color: #616161;
+    Font-family: 'Radio Canada', sans-serif;
+    font-size: 16px;
+    font-weight:500px;
+    Line-height: 27px;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 0;
+    width: 340px;
+    height: 27px;
+    margin: 0 auto;
+}
+p.bodylast{
+    color: #616161;
+    Font-family: 'Radio Canada', sans-serif;
+    font-size: 16px;
+    font-weight:500px;
+    Line-height: 27px;
+    text-align: center;
+    padding-top: 40px;
+    padding-bottom: 10px;
+    width: 537px;
+} 
+.notification{
+    width: 100%;
+    border-left:1px solid #f0efeb;
+    border-right:1px solid #f0efeb;
+    border-bottom:1px solid #f0efeb;
+    border-radius: 0 0 7px 7px;
+}
+span{
+    color: #008D40;
+    font-weight: bold;
+}
+hr{
+    margin: 5px 112px 5px 112px;
+    width: 340px;
+}
+
+
+/* RECEIPT SECTION */
+.receipt-wrapper{
+  color: rgba(0, 0, 0, 0.849);
+  background-color: white;
+}
+.receipt-wrapper .logo-wrapper {
+  width: 100px;
+  margin-bottom: 15px;
+}
+.receipt-wrapper address {
+  margin-bottom: 15px;
+  text-align: left;
+}
+.receipt-wrapper address p {
+  margin-bottom: 0px;
+  font-size: 12px;
+}
+.receipt-wrapper .form-wrapper{
+  background-color: white;
+}
+.receipt-wrapper .row {
+  border: 0.5px solid rgba(0, 0, 0, 0.18);
+}
+.receipt-wrapper .row .row-item-1 {
+  height: 25px;
+  font-weight: bold;
+  font-size: 12px;
+}
+.receipt-wrapper .row .col-item-1{
+  font-size: 12.2px;
+  text-align: left;
+  height: auto;
+}
+.receipt-wrapper .row .col-item-2{
+  font-size: 12.2px;
+  text-align: left;
+  height: auto;
+}
+.receipt-wrapper .row div {
+  border: 0.6px solid rgba(0, 0, 0, 0.18);
+  height: auto;
+}
+.row-item-general{
+  overflow-wrap: break-word;
+}
+.waybilldata{
+  display: block;
+  color: black !important;
+}
+
+.col{
+    width: 100%;
+}
+.row{ width:100%; display: flex; }
+.col-1{ width:8.33%;}
+.col-2{ width:16.67%;}
+.col-3{ width:25%;}
+.col-4{ width:33.33%;}
+.col-5{ width:41.67%;}
+.col-6{ width:50%;}
+.col-7{ width:58.33%;}
+.col-8{ width:66.67%;}
+.col-9{ width:75%;}
+.col-10{ width:83.33%;}
+.col-11{ width:91.67%;}
+.col-12{ width:100%;}
+
+@media (max-width:425px) {
+    body {
+        margin:0 auto;
+        background-color:#ffffff
+    }
+    table{
+        border-spacing:0;
+        width: 100%;
+        max-width: 425px;
+        margin: 0;
+    }
+    img{
+        border:0;
+    }
+    .wrapper{
+        width:100%;
+        max-width: 425px;
+        /* table-layout: fixed; */
+        background-color:#ffffff;
+        padding-bottom:60px;
+        margin: 0;
+    }
+    .main{
+        background-color:#ffffff;
+        margin:0;
+        width:100%;
+        max-width:425px;
+        border-spacing:0;
+        border-radius: 7px;
+        font-family: 'Radio Canada', sans-serif;
+        /* color: #171a1b; */
+        padding-top: 60px;
+        border: 1px #616161;
+        table-layout: fixed;
+    }
+    
+    .two-columns{
+        text-align: center;
+        width: 100%;
+        max-width: 420px;
+        height: 120px;
+        background-color: #008D40;
+        border-radius: 7px 7px 0 0;
+        padding: 0;
+    }
+    .two-columns .column{
+        width: 100%;
+        max-width: 300px;
+        display:inline;
+        /* vertical-align: top; */
+        text-align: center;
+        margin: 0;
+    }        
+    .logo{
+        width: 100%;
+        max-width: 425px;
+        height: 39px;
+        padding-top:10px;
+        margin: 0 auto;
+    }
+    
+    .button-dark{
+        background-color: #008D40;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 15px 32px;
+        border-radius: 5px;
+        font-weight: bold;
+        width: 295px;
+    }
+    p.otp-header{
+        color: #1D1D1D;
+        font-weight: 700;
+        font-size: 30px;
+        font-family: 'Radio Canada', sans-serif;
+        Font-style: Bold;
+        line-height: 50.4px;
+        width: 100%;
+        max-width: fit-content; 
+        margin: 32px auto;
+    }
+
+    p.body{
+        color: #616161;
+        Font-family: 'Radio Canada', sans-serif;
+        font-size: 16px;
+        font-weight: 500px;
+        Line-height: 24px;
+        text-align: center;
+        padding-bottom: 10px;
+        width:100%;
+        max-width: fit-content;
+        height: 24px;
+        margin: 0 auto;
+        /* table-layout: fixed; */
+    }
+    p.body-2{
+        color: #616161;
+        Font-family: 'Radio Canada', sans-serif;
+        font-size: 16px;
+        font-weight: 500px;
+        Line-height: 27px;
+        text-align: center;
+        padding-bottom: 60px;
+        width:100%;
+        max-width: fit-content;
+        height: 27px;
+        margin: 0 auto;
+        /* table-layout: fixed; */
+    }
+    p.bodymid{
+        color: #616161;
+        Font-family: 'Radio Canada', sans-serif;
+        font-size: 16px;
+        font-weight:500px;
+        Line-height: 27px;
+        text-align: center;
+        padding-bottom: 7px;
+        margin-bottom: 0;
+        width: 100%;
+        max-width: fit-content;
+        margin: auto;
+    }
+    p.bodylast{
+        color: #616161;
+        Font-family: 'Radio Canada', sans-serif;
+        font-size: 16px;
+        font-weight:500px;
+        Line-height: 20px;
+        text-align: center;
+        padding-top: 5px;
+        padding-bottom: 10px;
+        width: 100%;
+        max-width: fit-content;
+        margin: 0 auto;
+    } 
+    .notification{
+        width: 100%;
+        max-width: 425px;
+        table-layout: fixed;
+        border-left:1px solid #f0efeb;
+        border-right:1px solid #f0efeb;
+        border-bottom:1px solid #f0efeb;
+        border-radius: 0 0 7px 7px;
+    }
+    span{
+        color: #008D40;
+        font-weight: bold;
+    }
+    hr{
+        margin: auto;
+        width: 80%;
+        max-width: 425px;
+    }
+    
+}
+    </style>
+</head>
+<body>
+    <div class="wrapper" id="waybillReceipt">
+        <table class="main">
+
+            <!-- LOGO SECTION -->
+            
+            <tr>
+                <td class="two-columns">
+                    <table class="column">
+                        <tr>
+                            <td>
+                                <a class="logo" href="#"><img src="https://zowaselassets-com.stackstaging.com/logo.png" alt="Zowasel logo" title="Zowasel logo"></a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <!-- TITLE,BODY AND BUTTON -->
+                <tr>
+                    <td>
+                        <table class="notification">
+                            <tr>
+                                <td style="text-align:center; padding:15px">
+                                    <p class="otp-header">Waybill document</p>
+                                    <p class="body">Dear {{name}},</p>
+                                    <p class="body">Your waybill details for {{cropQuantity}} of {{cropTitle}} for an order <b>{{orderHash}}</b> has been created.</p>
+
+                                    <!-- WAYBILL DOCUMENT -->
+
+                                    <!-- WAYBILL RECEIPT -->
+                                    <div class="page-content slide waybilldocument" style="background-color: whitesmoke;">
+                                        <div class="receipt-wrapper mt-4 p-1" style="margin-top: 10px;">
+                                            <!-- logo -->
+                                            <!-- <div class="logo-wrapper"><img class="img-fluid" src="https://zowaselassets-com.stackstaging.com/zowasel-grey-logo.png" width="100px" alt="zowasel-logo" /></div> -->
+                                            <!-- address -->
+                                            <address>
+                                                <p>69A, Abba Johnson, Adeniyi Jones Av</p>
+                                                <p>Ikeja, Lagos, NIGERIA</p>
+                                                <!-- <p>Waybil Number: #<span class="order_hash"></span></p> -->
+                                            </address>
+                                            <div class="form-wrapper">
+                                                <!-- grid -->
+                                                <div class="container text-center">
+                                                    <div class="row"><div class="col row-item-1">DISPATCH SECTION</div></div>
+                                                    <div class="row row-main">
+                                                        <div class="col-6 col-item-1">FROM: <span class="waybilldata w_from">{{w_from}}</span></div>
+                                                        <div class="col-6 col-item-2">To: <span class="waybilldata w_to">{{w_to}}</span></div>
+                                                    </div>
+                                                    <div class="row row-main">
+                                                        <div class="col-4 col-item-1">DATE: <span class="waybilldata w_date">{{w_date}}</span> </div>
+                                                        <div class="col-4 col-item-2">COSIGNEE: <span class="waybilldata w_cosignee">{{w_cosignee}}</span> </div>
+                                                        <div class="col-4 col-item-2">Truck No./Trailer No: <span class="waybilldata w_truckno">{{w_truckno}}</span> </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-4 row-item-general">S/No.</div>
+                                                        <div class="col-4 row-item-general">DESCRIPTION</div>
+                                                        <div class="col-4 row-item-general">QUANTITY</div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-4 row-item-general">1</div>
+                                                        <div class="col-4 row-item-general">
+                                                            <span class="waybilldata w_crop1">{{product_description}}</span>
+                                                        </div>
+                                                        <div class="col-4 row-item-general">
+                                                            <span class="waybilldata w_crop1qty">{{product_quantity}}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-4 row-item-general">2</div>
+                                                        <div class="col-4 row-item-general"></div>
+                                                        <div class="col-4 row-item-general"></div>
+                                                    </div>
+                                                    <div class="row row-main"><div class="col col-item-1">REMARKS: <span class="waybilldata w_remark">{{w_remark}}</span> </div></div>
+                                                    <div class="row row-main">
+                                                        <div class="col col-item-1">Driver's Name: <span class="waybilldata w_drivername">{{w_drivername}}</span> </div>
+                                                        <div class="col-6 col-item-2">Seller's Representative: <span class="waybilldata w_sellerRepname">{{w_sellerRepname}}</span> </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-6 row-item-general">Driving License/Permit <span class="waybilldata w_drivingicense">{{w_drivingicense}}</span> </div>
+                                                        <div class="col-6 row-item-general">Title: <span class="waybilldata w_sellertitle">{{w_sellertitle}}</span> </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-6 row-item-general">Signature and Date: <span class="waybilldata w_todaydate">{{w_todaydate}}</span> </div>
+                                                        <div class="col-6 row-item-general">Signature and Date: <span class="waybilldata w_todaydate"></span></div>
+                                                    </div>
+                                                    <div class="row"><div class="col row-item-1">RECEIPT SECTION</div></div>
+                                                    <div class="row">
+                                                        <div class="col-4 row-item-general">S/No.</div>
+                                                        <div class="col-4 row-item-general">DESCRIPTION</div>
+                                                        <div class="col-4 row-item-general">QUANTITY</div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-4 row-item-general">1</div>
+                                                        <div class="col-4 row-item-general">
+                                                            <span class="waybilldata w_crop1">{{w_crop1}}</span>
+                                                        </div>
+                                                        <div class="col-4 row-item-general">
+                                                            <span class="waybilldata w_crop1qty">{{w_crop1qty}}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-4 row-item-general">2</div>
+                                                        <div class="col-4 row-item-general"></div>
+                                                        <div class="col-4 row-item-general"></div>
+                                                    </div>
+                                                    <div class="row row-main"><div class="col col-item-1">REMARKS: <span class="waybilldata w_receiptremark">{{w_receiptremark}}</span> </div></div>
+                                                    <div class="row row-main">
+                                                        <div class="col-6 col-item-2">Seller's Representative: <span class="waybilldata w_receipt_sellerRep">{{w_receipt_sellerRep}}</span> </div>
+                                                        <div class="col col-item-1">Received by: <span class="waybilldata w_receipt_receiveBy">{{w_receipt_receiveBy}}</span> </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-6 row-item-general">Title: <span class="waybilldata w_receipt_sellerTitle">{{w_receipt_sellerTitle}}</span> </div>
+                                                        <div class="col-6 row-item-general">Title: <span class="waybilldata w_receipt_receiverTitle">{{w_receipt_receiverTitle}}</span> </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-6 row-item-general">Signature and Date: <span class="waybilldata w_todaydate">{{w_todaydate}}</span></div>
+                                                        <div class="col-6 row-item-general">Signature and Date: <span class="waybilldata w_todaydate"></span></div>
+                                                    </div>
+                                                    <p class="way-bill mt-5 mb-4">
+                                                        The <strong>way bill</strong> puts the person in charge of the conveyance carrying the consignment of said amount of goods to the stated destination. It is a mandatory document that is generated from
+                                                        zowasel portal by registered sellers or transporters who undertake movement of commodities and must be presented at point of delivery in the corporate.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Buttons -->
+                                            <!-- <div class="btn-group w-100 gap-4 mt-3">
+                                                <a href="https://community.hubspot.com/html/@A1F4F82CBB93513A856AEAAAD84C5F0F/assets/HubSpot_Logo_12_2_20.png" download>dgrgrgrgr</a>
+                                                <a href="javascript:void(0)" onclick="downloadwaybillDocument()" class="btn zowaselBlue text-white w-100" type="button">Download document</a> -->
+                                            </div>
+                                            <!-- Buttons -->
+
+                                        </div>     
+                                    </div>         
+                                    <!-- WAYBILL RECEIPT --> 
+
+                                    <!-- WAYBILL DOCUMENT -->
+
+                                    <!-- <p class="body-2">Click the button below to process and complete the order</p>
+                                    <a href="{{orderLink}}" class="button-dark" style="color:#FFFFFF;">Complete Order</a> -->
+                                    <div style="text-align: center;">
+                                        <p class="bodymid">This is an automated message, do not reply.</p>
+                                        
+                                        <hr>
+                                        <p class="body">Thank you for choosing Zowasel</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+        </table>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.js" integrity="sha512-vNrhFyg0jANLJzCuvgtlfTuPR21gf5Uq1uuSs/EcBfVOz6oAHmjqfyPoB5rc9iWGSnVE41iuQU4jmpXMyhBrsw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        // <!-- --------------------------- DOWNLOAD AS PDF --------------------------- --
+        function downloadwaybillDocument(){
+            alert("gbf");
+            const waybillReceipt = document.getElementById("waybillReceipt");
+            waybillReceipt.style.marginTop = "-100px";
+            console.log(waybillReceipt);
+            // console.log(window);
+            var opt = {
+            margin:       [1,1],
+            filename:     'waybill.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            // html2canvas:  { scale:1, scrollY:0 },
+            html2canvas:  { scale: 1, scrollY:90, logging: true, dpi: 192, letterRendering: true },
+            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+            // format: [10000, 60]
+            };
+            html2pdf().from(waybillReceipt).set(opt).save();
+            // .from() -> .toContainer() -> .toCanvas() -> .toImg() -> .toPdf() -> .save()
+            
+        };
+    </script>
+    <!-- --------------------------- WAYBILL DOCUMENT --------------------------- -->
+</body>
+</html>

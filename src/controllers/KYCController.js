@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator");
-const { Crop, ErrorLog, Order, User, Company, KYC } = require("~database/models");
+const { Crop, ErrorLog, Order, User, Company, KYC, VfdWallet } = require("~database/models");
 const bcrypt = require('bcryptjs');
 const OnfidoInstance = require("~providers/Onfido");
 var base64 = require('base64-stream');
@@ -124,6 +124,72 @@ class KYCController {
                         console.log(error);
                     }
                     var data = req.body
+
+
+                    let user = req.global.user;
+                    let Vfdwallet = await VfdWallet.findOne({
+                        where: { user_id: user.id }
+                    });
+
+                    if (Vfdwallet) {
+                        return res.status(400).json({
+                            error: true,
+                            message: "Vfd wallet already created",
+                            // data: { balance: wallet.balance }
+                            data: []
+                        });
+                    } else {
+                        const requestData = {
+                            firstname:body.first_name,
+                            lastname:body.last_name,
+                            middlename:"",
+                            dob:body.dob,
+                            address:body.address,
+                            gender:body.gender,
+                            phone:body.phone,
+                            bvn:body.bvn
+                        };
+                        const config = {
+                            headers: {
+                                'Authorization': `Bearer ${process.env.VFD_ACCESS_TOKEN}`,
+                            }
+                        };
+
+                        /* ------------------------------ AXIOS REQUEST ----------------------------- */
+                        await axios.post(process.env.VFD_BASE_URL+
+                            "/wallet2/clientdetails/create?wallet-credentials="+process.env.VFD_WALLET_CREDENTIALS, 
+                            requestData, config)
+                        .then(response => {
+                            
+                            const responseData = response.data;
+                            const data = responseData.data;
+                            const accountNum = data.accountNo;
+            
+                            let vfdWallet = VfdWallet.create({
+                                user_id:user.id,
+                                account_number:accountNum
+                            });
+                            if(vfdWallet){
+                                // res.status(200).json({
+                                //     error:false,
+                                //     message: "Wallet created successfully",
+                                //     data: {accountNo:accountNum}
+                                // })
+                            }else{
+                                res.status(400).json({
+                                    error:true,
+                                    message:"Request failed"
+                                })
+                            }
+            
+                            
+                        })
+                        .catch(error => {
+                        // Handle any errors
+                            res.status(500).json({ error: 'An error occurred: ' + error});
+                        });
+                        /* ------------------------------ AXIOS REQUEST ----------------------------- */
+                    }
 
 
                     return res.status(200).json({

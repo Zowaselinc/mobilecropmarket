@@ -73,6 +73,8 @@ const Notification = DB.notification = require('./notification.model.js').Model(
 const Withdrawal = DB.withdrawal = require('./withdrawal.model.js').Model(initialInstance, createSequelizeInstance(), Sequelize);
 const KYC = DB.kyc = require('./kyc.model.js').Model(initialInstance, createSequelizeInstance(), Sequelize);
 const KYB = DB.kyb = require('./kyb.model').Model(initialInstance, createSequelizeInstance(), Sequelize);
+const VfdWallet = DB.vfdwallets = require("./vfdWallet.model").Model(initialInstance, createSequelizeInstance(), Sequelize);
+
 
 //---------------------------------------------------
 //Register Relationships
@@ -293,5 +295,6 @@ module.exports = {
   Notification,
   Withdrawal,
   KYC,
-  KYB
+  KYB,
+  VfdWallet
 };
