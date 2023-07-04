@@ -33,7 +33,7 @@ module.exports = {
 
 
     startKYC: [
-        body('id_type').isString().matches('^(passport|voter_id|ssn|social_insurance|tax_id|identity_card|driving_licence|share_code)'),
+        body('id_type').isString().matches('^(passport|voter_id|ssn|social_insurance|tax_id|identity_card|driving_licence|share_code|vnin|driver_license|voter_card)'),
         body('id_number').not().isEmpty(),
         body('first_name').not().isEmpty(),
         body('last_name').not().isEmpty(),
@@ -45,6 +45,27 @@ module.exports = {
         body('dob').not().isEmpty(),
         body('gender').isString().matches('^(male|female)'),
         body('bvn').not().isEmpty(),
+    ],
+
+    nNIN: [
+        body('firstname').not().isEmpty(),
+        body('lastname').not().isEmpty()
+    ],
+
+    voterCard: [
+        body('firstname').not().isEmpty(),
+        body('lastname').not().isEmpty(),
+        body('dob').not().isEmpty()
+    ],
+
+    driverLicence: [
+        body('firstname').not().isEmpty(),
+        body('lastname').not().isEmpty()
+    ],
+
+    nigeriaPassport: [
+        body('firstname').not().isEmpty(),
+        body('lastname').not().isEmpty()
     ],
 
     retriveCheck: [

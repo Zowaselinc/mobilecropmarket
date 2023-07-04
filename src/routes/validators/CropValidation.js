@@ -19,7 +19,7 @@ const Extended = {
         body('qty').not().isEmpty(),
         body('price').not().isEmpty(),
         body('color').not().isEmpty(),
-        body('moisture_content').not().isEmpty(),
+        // body('moisture').not().isEmpty(),
         body('foreign_matter').not().isEmpty(),
         body('broken_grains').optional(),
         body('weevil').optional(),
@@ -62,9 +62,9 @@ module.exports = {
     addCropForSaleValidator: [
 
         ...Extended.addCropValidator,
-        body('state').isString(),
-        body('zip').isString(),
-        body('country').isString(),
+        // body('state').isString(),
+        // body('zip').isString(),
+        // body('country').isString(),
         body('warehouse_address').isString(),
 
     ],

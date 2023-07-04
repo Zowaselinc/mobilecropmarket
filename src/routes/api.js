@@ -130,8 +130,17 @@ Router.middleware(['isAuthenticated']).group((router) => {
     router.get("/users/account/checkkycstatus", KYCController.checkycStatus);
 
     router.get("/users/account/kycstatus", KYCController.retriveCheck);
-
+        
     router.get("/users/account/kycdocument/:id", KYCController.getDocument);
+
+    // QORELID
+    router.post('/users/kycverification/vnin/:vnin', AccountValidator.nNIN, KYCController.qorevNINVerificationAPIroute);
+    
+    router.post('/users/kycverification/votercard/:vin', AccountValidator.voterCard, KYCController.qoreVoterCardVerificationAPIroute);
+
+    router.post('/users/kycverification/driverlicense/:driverid', AccountValidator.driverLicence, KYCController.qoreDriverLicenseVerificationAPIroute);
+
+    router.post('/users/kycverification/nigeriapassport/:passportno', AccountValidator.nigeriaPassport, KYCController.qoreNigeriaPassportVerificationAPIroute);
 
     /* ----------------------------------- KYB ---------------------------------- */
 
@@ -220,7 +229,7 @@ Router.middleware(['isAuthenticated']).group((router) => {
  
     /* ------------------------------- Crop ------------------------------ */
 
-    router.post('/crop/:type/add', CropValidation.addCropWantedValidator, CropController.add);
+    router.post('/crop/:type/add', CropValidation.addCropForSaleValidator, CropController.add);
     router.get('/crop/getbycropwanted', CropController.getByCropWanted);
     router.get('/crop/getbycropauction', CropController.getByCropAuctions);
     router.get('/crop/getbycropoffer', CropController.getByCropOffer);
@@ -234,7 +243,7 @@ Router.middleware(['isAuthenticated']).group((router) => {
 
 
     
-    // router.post('/crop/editbyid', CropValidation.addCropValidator, CropController.EditById);
+    router.post('/crop/:type/:crop_id/edit', CropValidation.addCropForSaleValidator, CropController.EditById);
 
 
     /* ------------------------------- Crop Specification ------------------------------ */
@@ -303,10 +312,11 @@ Router.middleware('isAuthenticated').group((router) => {
 // Router.group((router) => {
     /* ---------------------------------- Input ---------------------------------- */
     router.post('/input/add', InputsValidator.createInputValidator, InputController.createInput);
+    router.post('/input/edit/:input_id', InputsValidator.createInputValidator, InputController.EditById);
     router.get('/input/getallbyuserid/:user_id', InputController.getAllInputsByUser);
     router.get('/input', InputController.getallInputs);
     router.delete('/input/:id', InputController.deleteInputById);
-    router.post('/input/:id/deactivate', InputController.deactivateInputById);
+    router.post('/input/:id/:activatetype', InputController.deactivateInputById);
     router.get('/input/:input', InputController.getInputById);
     router.get('/input/getallbycategory/:category', InputController.getallInputsByCategory);
     router.get('/input/getallbymanufacturer/:manufacturer', InputController.getallInputsByManufacturer);

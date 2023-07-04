@@ -536,6 +536,7 @@ class AuthController {
         }
 
         var resetToken = md5(code);
+        var resetTokenNoMd5 = code;
 
         //Check for exixting
         var formerCode = await UserCode.findOne({ where: { email: data.email, type: "reset" } });
@@ -544,12 +545,12 @@ class AuthController {
             UserCode.create({
                 email: data.email,
                 type: "reset",
-                code: resetToken
+                code: resetTokenNoMd5
             }).catch(error => {
                 console.log(error.sqlMessage)
             });
         } else {
-            UserCode.update({ code: resetToken },
+            UserCode.update({ code: resetTokenNoMd5 },
                 {
                     where: { email: data.email, type: "reset" }
                 }).catch(error => {
@@ -557,15 +558,24 @@ class AuthController {
                 });
         }
 
-        Mailer()
-            .to(data.email).from(process.env.MAIL_FROM)
-            .subject('Reset Password')
-            .template('emails.ResetEmail', { resetLink: `${refererUrl}resetpassword/${resetToken}` }).send();
+        // Mailer()
+        //     .to(data.email).from(process.env.MAIL_FROM)
+        //     .subject('Reset Password')
+        //     // .template('emails.ResetEmail', { resetLink: `${refererUrl}resetpassword/${resetToken}` }).send();
+        //     .template('emails.ResetEmail', { resetCode: `${resetTokenNoMd5}` }).send();
+        let from = process.env.SENDGRID_MAIL_FROM;
+        let to = data.email;
+        let subject = 'Reset Password';
+        let text = '';
+        let dynamicTemplateData = {resetCode: `${resetTokenNoMd5}`}
+        let template = 'emails.ResetEmail';
+        
+        await SendgridMailer.sendMail(from,to,subject,text,template, dynamicTemplateData);
 
 
         res.status(200).json({
             status: true,
-            message: "Code sent successfully"
+            message: "Code sent successfully "+resetTokenNoMd5
         });
 
     }
@@ -611,7 +621,7 @@ class AuthController {
         if (!getCode) {
             return res.status(400).json({
                 error: true,
-                message: "Invalid reset request"
+                message: "Invalid reset code"
             });
         }
 

@@ -62,7 +62,7 @@ class CropController {
                     // } else {
             var data = req.body;
             // if (data.image1 && data.image2 && data.image3 && data.image4 && data.image5) {
-            if (data.images) {
+            if (data.images) {  
                 let images = data.images;
                 let imgArray = images.split(',');
                 // let allImages = Object.keys(req.files);
@@ -725,12 +725,12 @@ class CropController {
         // return res.status(200).json({
         //     message : "Add Cropdescription "
         // });
-
+    
         let sampleFile;
         let uploadPath;
-
+    
         const errors = validationResult(req);
-
+    
         let randomid = crypto.randomBytes(8).toString("hex");
         // let allImages = Object.keys(req.files);
         // console.log(__dirname + '/uploads/' + req.files[allImages[0]].name);
@@ -743,102 +743,132 @@ class CropController {
                     data: errors,
                 });
             }
-
-            /* ------------------------ UPDATE INTO CROP TABLE ----------------------- */
-
-            var crop = await Crop.findOne({ where: { id: req.body.crop_id } });
-            if (crop) {
-                var updateCrop = await Crop.update(
-                    {
-                        user_id: req.body.user_id,
-                        type: req.body.type,
-                        category: req.body.category,
-                        sub_category: req.body.sub_category,
-                        active: 0,
-                        market: "crop",
-                        description: req.body.description,
-                        // images: my_object.toString(),
-                        currency: req.body.currency,
-                        is_negotiable: req.body.is_negotiable,
-                        video: req.body.video,
-                        packaging: req.body.packaging,
-                        application: req.body.application,
-                        manufacture_name: req.body.manufacture_name,
-                        manufacture_date: req.body.manufacture_date,
-                        expiration_date: req.body.expiration_date,
-                    },
-                    { where: { id: req.body.crop_id } }
-                );
-
-                /* ------------------------ UPDATE INTO CROP TABLE ----------------------- */
-
-                if (updateCrop) {
-                    var updateCropSpecification = await CropSpecification.update(
-                        {
-                            model_id: crop.id,
-                            model_type: req.body.model_type,
-                            qty: req.body.qty,
-                            price: req.body.price,
-                            color: req.body.color,
-                            moisture: req.body.moisture,
-                            foreign_matter: req.body.foreign_matter,
-                            broken_grains: req.body.broken_grains,
-                            weevil: req.body.weevil,
-                            dk: req.body.dk,
-                            rotten_shriveled: req.body.rotten_shriveled,
-                            test_weight: req.body.test_weight,
-                            hectoliter: req.body.hectoliter,
-                            hardness: req.body.hardness,
-                            splits: req.body.splits,
-                            oil_content: req.body.oil_content,
-                            infestation: req.body.infestation,
-                            grain_size: req.body.grain_size,
-                            total_defects: req.body.total_defects,
-                            dockage: req.body.dockage,
-                            ash_content: req.body.ash_content,
-                            acid_ash: req.body.acid_ash,
-                            volatile: req.body.volatile,
-                            mold: req.body.mold,
-                            drying_process: req.body.drying_process,
-                            dead_insect: req.body.dead_insect,
-                            mammalian: req.body.mammalian,
-                            infested_by_weight: req.body.infested_by_weight,
-                            curcumin_content: req.body.curcumin_content,
-                            extraneous: req.body.extraneous
-                            // unit: req.body.unit,
-                            // liters: req.body.liters
-                        },
-                        { where: { model_id: req.body.crop_id } }
-                    );
-
-                    if (updateCropSpecification) {
-                        var updateCropRequest = await CropRequest.update(
-                            {
-                                crop_id: crop.id,
-                                state: req.body.state,
-                                zip: req.body.zip,
-                                country: req.body.country,
-                                address: req.body.address,
-                                // delivery_method: req.body.delivery_method,
-                                // delivery_date: req.body.delivery_date,
-                                delivery_window: req.body.delivery_window,
-                            },
-                            { where: { crop_id: req.body.crop_id } }
-                        );
-
-                        return res.status(200).json({
-                            error: false,
-                            message: "Crop edited successfully",
-                            // "product": product, Cropspec, ProdRequest
-                        });
-                    }
-                }
-            } else {
+            var type = req.params.type;
+    
+            if (type != 'wanted' && type != "sale" && type != 'auction') {  
                 return res.status(400).json({
-                    error: true,
-                    message: "No such crop found",
-                    data: req.body,
+                    "error": true,
+                    "message": "Invalid type",
+                    "data": errors,
                 });
+            }
+    
+            if (type == "sale") {
+                type = "offer";
+            }
+    
+            var data = req.body;
+            if (data.images) {
+                let images = data.images;
+                let imgArray = images.split(',');
+    
+                /* ------------------------ UPDATE INTO CROP TABLE ----------------------- */
+                var crop = await Crop.findOne({ where: { id: req.params.crop_id } });
+                if (crop) {
+                    var updateCrop = await Crop.update(
+                        {
+                            // user_id: req.body.user_id,
+                            type: type,
+                            category_id: req.body.category_id,
+                            subcategory_id: req.body.subcategory_id,
+                            // active: 0,
+                            market: "crop",
+                            description: req.body.description,
+                            images: JSON.stringify(imgArray),
+                            currency: req.body.currency,
+                            is_negotiable: req.body.is_negotiable,
+                            video: req.body.video,
+                            packaging: "",
+                            application: "",
+                            warehouse_address: req.body.warehouse_address,
+                            // manufacture_name: req.body.manufacture_name,
+                            // manufacture_date: req.body.manufacture_date,
+                            // expiration_date: req.body.expiration_date,
+                        },
+                        { where: { id: req.params.crop_id } }
+                    );
+    
+                    /* ------------------------ UPDATE INTO CROP TABLE ----------------------- */
+    
+                    if (updateCrop) {
+                        var updateCropSpecification = await CropSpecification.update(
+                            {
+                                model_id: req.params.crop_id,
+                                model_type: "crop",
+                                qty: req.body.qty,
+                                price: req.body.price,
+                                color: req.body.color,
+                                moisture: req.body.moisture,
+                                foreign_matter: req.body.foreign_matter,
+                                broken_grains: req.body.broken_grains,
+                                weevil: req.body.weevil,
+                                dk: req.body.dk,
+                                rotten_shriveled: req.body.rotten_shriveled,
+                                test_weight: req.body.test_weight,
+                                hectoliter: req.body.hectoliter,
+                                hardness: req.body.hardness,
+                                splits: req.body.splits,
+                                oil_content: req.body.oil_content,
+                                infestation: req.body.infestation,
+                                grain_size: req.body.grain_size,
+                                total_defects: req.body.total_defects,
+                                dockage: req.body.dockage,
+                                ash_content: req.body.ash_content,
+                                acid_ash: req.body.acid_ash,
+                                volatile: req.body.volatile,
+                                mold: req.body.mold,
+                                drying_process: req.body.drying_process,
+                                dead_insect: req.body.dead_insect,
+                                mammalian: req.body.mammalian,
+                                infested_by_weight: req.body.infested_by_weight,
+                                curcumin_content: req.body.curcumin_content,
+                                extraneous: req.body.extraneous
+                                // unit: req.body.unit,
+                                // liters: req.body.liters
+                            },
+                            { where: { model_id: req.params.crop_id } }
+                        );
+    
+                        if (updateCropSpecification) {
+                            if (type == "wanted") {
+                                var createCropRequest = await CropRequest.update({
+                                    crop_id: req.params.crop_id,
+                                    state: req.body.state,
+                                    zip: req.body.zip,
+                                    country: req.body.country,
+                                    address: req.body.warehouse_address,
+                                    delivery_window: req.body.delivery_window 
+                                },
+                                { where: { crop_id: req.params.crop_id } })
+                            }
+    
+                            if (type == "auction") {
+                                var createAuction = await Auction.update({
+                                    crop_id: req.params.crop_id,
+                                    start_date: req.body.start_date,
+                                    end_date: req.body.end_date,
+                                    minimum_bid: req.body.minimum_bid,
+                                    // status: 1
+                                },
+                                { where: { crop_id: req.params.crop_id } })
+                            }
+    
+                            
+    
+                            return res.status(200).json({
+                                error: false,
+                                message: "Crop edited successfully",
+                                // "product": product, Cropspec, ProdRequest
+                            });
+                        }
+                    }
+                } else {
+                    return res.status(400).json({
+                        error: true,
+                        message: "No such crop found",
+                        data: req.body,
+                    });
+                }
             }
         } catch (e) {
             var logError = await ErrorLog.create({

@@ -120,6 +120,92 @@ class InputProducts {
     }
   }
 
+  static async EditById(req, res) {
+    let sampleFile;
+    let uploadPath;
+
+    const errors = validationResult(req);
+
+    let randomid = crypto.randomBytes(8).toString("hex");
+
+    try {
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          error: true,
+          message: "All fields are required",
+          data: [],
+        });
+      }
+      // if (!req.files || Object.keys(req.files).length === 0) {
+      if (!req.body.images) {
+        return res.status(400).json({
+          error: true,
+          message: "No input image(s) found.",
+          data: [],
+        });
+      } else {
+        // let allImages = Object.keys(req.files);
+
+        // Jst like php explode to change each item to string and be in an array, I will use split in JS
+        let images = req.body.images;
+        let imgArray = images.split(',');
+
+        /* ------------------------ UPDATE INTO INPUT TABLE ----------------------- */
+        var findInput = await Input.findOne({ where: { id: req.params.input_id } });
+        if(findInput){
+          var input = await Input.update({
+            // user_id: req.global.user.id,
+            category_id: req.body.category_id,
+            subcategory_id: req.body.subcategory_id,
+            product_type: req.body.product_type,
+            crop_focus: req.body.crop_focus,
+            packaging: req.body.packaging,
+            description: req.body.description,
+            stock: req.body.stock,
+            usage_instruction: req.body.usage_instruction,
+            stock: req.body.stock,
+            kilograms: req.body.kilograms,
+            grams: req.body.grams,
+            liters: req.body.liters,
+            images: JSON.stringify(imgArray),
+            price: req.body.price,
+            currency: req.body.currency,
+            manufacture_name: req.body.manufacture_name,
+            manufacture_date: req.body.manufacture_date,
+            delivery_method: req.body.delivery_method,
+            expiry_date: req.body.expiry_date,
+            manufacture_country: req.body.manufacture_country,
+            // state: req.body.state,
+            video: req.body.video,
+            // active: 1,
+          },{ where: { id: req.params.input_id } });
+
+          if (input) {
+            return res.status(200).json({
+              error: false,
+              message: "Input updated successfully",
+              data: [],
+            });
+          }
+        }
+        /* ------------------------ UPDATE INTO INPUT TABLE ----------------------- */
+      }
+    } catch (e) {
+      var logError = await ErrorLog.create({
+        error_name: "Error on adding an input",
+        error_description: e.toString(),
+        route: "/api/input/product/add",
+        error_code: "500",
+      });
+      if (logError) {
+        return res.status(500).json({
+          error: true,
+          message: "Unable to complete request at the moment" + e,
+        });
+      }
+    }
+  }
+
   static async getAllInputsByUser(req, res) {
     try {
       var alluserinputs = await Input.findAll({
@@ -136,7 +222,7 @@ class InputProducts {
         ],
         where: {
           user_id: req.global.user.id,
-          active: 1,
+          // active: 1,
         },
         order: [["id", "DESC"]],
       });
@@ -178,6 +264,8 @@ class InputProducts {
           { model: SubCategory, as: "subcategory" },
           { model: User, as: "user" },
         ],
+        where: { active: 1 },
+        order: [["id", "DESC"]],
       });
 
 
@@ -217,6 +305,7 @@ class InputProducts {
         include: [
           { model: Category, as: "category" },
           { model: SubCategory, as: "subcategory" },
+          { model: User, as: "user" },
         ],
         where: { id: req.params.input },
       });
@@ -470,13 +559,28 @@ class InputProducts {
 
       var input = await Input.findOne({ where: { id: req.params.id } });
       if (input) {
-        input.active = 0;
-        input.save();
+        let responsemessage;
+        if(req.params.activatetype=="deactivate"){
+          input.active = 0;
+          responsemessage = "Input deactivated successfully";
+        }else{
+          input.active = 1;
+          responsemessage = "Input activated successfully";
+        }
+        // input.save();
 
-        return res.status(200).json({
-          error: false,
-          message: "Input deactivated successfully",
-        });
+        if(input.save()){
+          return res.status(200).json({
+            error: false,
+            message: `${responsemessage}`,
+            data: input
+          });
+        }else{
+          return res.status(400).json({
+            error: false,
+            message: "Failed to make changes. Please try again.",
+          });
+        }
       } else {
         return res.status(400).json({
           error: true,
@@ -494,7 +598,7 @@ class InputProducts {
       if (logError) {
         return res.status(500).json({
           error: true,
-          message: "Unable to complete request at the moment",
+          message: "Unable to complete req at the moment "+e.toString(),
         });
       }
     }
